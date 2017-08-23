@@ -6,3 +6,5 @@ authors = ["sh4869 <nobuk4869@gmail.com>"]
 [dependencies]
 pulldown-cmark = "0.1.0"
 maud = "*"
+chrono = "0.4"
+glob = "0.2"
