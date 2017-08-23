@@ -119,10 +119,10 @@ fn conver_md(path: &Path) -> io::Result<Daily> {
     daily.content = html_buf;
 
     // Make Directory, and Write Files
-    if Path::new("dest/").exists() == false {
-        fs::create_dir("dest/")?;
+    if Path::new("docs/").exists() == false {
+        fs::create_dir("docs/")?;
     }
-    let destpath = "dest/".to_string() + &daily.day.format("%Y/%m/%d").to_string() + &".html";
+    let destpath = "docs/".to_string() + &daily.day.format("%Y/%m/%d").to_string() + &".html";
     let parent = Path::new(&destpath).parent().unwrap();
     if parent.exists() == false {
         fs::create_dir_all(parent.to_str().unwrap())?;
@@ -175,7 +175,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()>{
             }
         }
     };
-    let destpath = "dest/index.html";
+    let destpath = "docs/index.html";
     let mut file = File::create(&destpath)?;
     //println!("{}",&markup.into_string());
     file.write_all(markup.into_string().as_bytes())?;
