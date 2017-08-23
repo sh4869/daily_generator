@@ -154,7 +154,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()>{
             style type="text/css" {
                 ".container{margin-top: 1em;margin-bottom: 1em;}"
                 ".day{display:block;border-bottom: 1px solid black;}"
-                ".day a{text-indent:1em;font-size:1.5rem;}"
+                ".day a{text-indent:1em;font-size:2rem;}"
                 "p{margin-bottom: 0.5em;}"
             }
             title {
