@@ -60,33 +60,16 @@ p {
 }
 
 .daily h1 {
-    font-size: 3em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
 
 .daily h2 {
-    font-size: 2.5em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
 
 .daily h3 {
-    font-size: 2em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
-}
-
-/* Larger than phablet */
-
-@media (min-width: 550px) {
-    .daily h1 {
-        font-size: 3.3em;
-    }
-    .daily h2 {
-        font-size: 3.0em;
-    }
-    .daily h3 {
-        font-size: 2.7em;
-    }
 }
