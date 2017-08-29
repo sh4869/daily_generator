@@ -40,7 +40,7 @@ impl Daily {
                         ".daily p{text-indent:1em;}"
                     }
                     title {
-                        (self.day) " " (self.title)
+                        (self.day.format("%Y/%m/%d")) " " (self.title)
                     }
                 }
                 body{
