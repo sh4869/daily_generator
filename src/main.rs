@@ -23,8 +23,10 @@ impl Daily {
     fn generate_html(&self) -> String {
         let css = r##"
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" />
+        <link rel="stylesheet" href="../../layers.min.css" />
+        <link rel="stylesheet" href="../../index.css"/>
         "##;
+        let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
         let markup =
             html! {
             html {
@@ -32,28 +34,34 @@ impl Daily {
                     meta chaset="utf-8";
                     meta name="viewport" content="width=device-width, initial-scale=1";
                     (PreEscaped(css))
-                    style type="text/css" {
-                        ".title{text-align:center;}"
-                        ".title h1{font-size: 4rem;}"
-                        ".title h2{font-size: 3.5rem;}"
-                        ".daily h1{font-size: 2.5rem;}"
-                        ".daily p{text-indent:1em;}"
-                    }
                     title {
-                        (self.day.format("%Y/%m/%d")) " - " (self.title)
+                        (title)
                     }
+                    "\n"
                 }
                 body{
-                    div.container {
-                        div.title {
-                            h1 (self.day.format("%Y/%m/%d"));
-                            h2 (self.title);
-                            hr;
+                    div.row {
+                        div.row-content.buffer {
+                            
+                            div.info {
+                                h1 {
+                                    (self.day.format("%Y/%m/%d")) " - " (self.title);
+                                }
+                            }
+                            div.daily {
+                                (PreEscaped(&self.content))
+                            }
+                            footer {
+                                hr;
+                                a href=("http://sh4869.net/diary") {
+                                    "Daily Bread"
+                                }
+                                p {
+                                    (PreEscaped("&copy; 2017 <a href=\"sh4869.net\">sh4869</a>") )
+                                }
+                            }
                         }
-                        div.daily {
-                            (PreEscaped(&self.content))
-                        }
-                    }   
+                    }
                 }
             }
         };
@@ -143,7 +151,8 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()>{
     dailies.sort_by(|a,b| b.day.cmp(&a.day));
     let css = r##"
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" />
+    <link rel="stylesheet" href="layers.min.css" />
+    <link rel="stylesheet" href="index.css"/>
     "##;
     let markup = 
     html! {
@@ -151,24 +160,28 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()>{
             meta chaset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
             (PreEscaped(css))
-            style type="text/css" {
-                ".container{margin-top: 1em;margin-bottom: 1em;}"
-                ".day{display:block;border-bottom: 1px solid black;}"
-                ".day a{text-indent:1em;font-size:2rem;}"
-                "p{margin-bottom: 0.5em;}"
-            }
             title {
                 "Daily Bread"
             }
         }
         body {
-            div.container {
-                @for daily in dailies.iter() {
-                    div.day {
-                        @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
-                        p (daily.day.format("%Y/%m/%d"))
-                        a href=(link){
-                            p (daily.title)
+            div.row {
+                div.row-content.buffer {
+                    @for daily in dailies.iter() {
+                        div.day {
+                            @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
+                            p (daily.day.format("%Y/%m/%d"))
+                            a href=(link){
+                                p.title (daily.title)
+                            }
+                        }
+                    }
+                    footer {
+                        a href=("http://sh4869.net/diary") {
+                            "Daily Bread"
+                        }
+                        p {
+                            (PreEscaped("&copy; 2017 <a href=\"sh4869.net\">sh4869</a>") )
                         }
                     }
                 }
