@@ -94,17 +94,10 @@ fn get_date(filepath: &String) -> io::Result<Date<Local>> {
 }
 
 fn conver_md(path: &Path) -> io::Result<Daily> {
-    let rootdir = fs::canonicalize(Path::new("."))?;
     let mut file = File::open(path)?;
 
-    // FilePathを取得(ex: 2017/08/12.md)
-    let mut filepath = path.to_str().unwrap().to_string();
-    filepath = filepath.replace(
-        &(rootdir.as_path().to_str().unwrap().to_string() + &"\\".to_string()),
-        "",
-    );
     let date;
-    match get_date(&filepath) {
+    match get_date(&path.to_str().unwrap().into()) {
         Ok(d) => date = d,
         Err(e) => {
             println!("{}",e.to_string());
@@ -230,7 +223,7 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
     let mut v: Vec<Daily> = Vec::new();
     for path in paths {
         println!("{}",path.to_str().unwrap());
-        match conver_md(fs::canonicalize(path)?.as_path()) {
+        match conver_md(path.as_path()) {
             Ok(daily) => v.push(daily),
             Err(e) => println!("{}",e)
         }
