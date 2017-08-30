@@ -228,7 +228,7 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
     }
     let mut v: Vec<Daily> = Vec::new();
     for path in paths {
-        try!(println!("{}",path.to_str().unwrap()));
+        println!("{}",path.to_str().unwrap());
         match conver_md(fs::canonicalize(path)?.as_path()) {
             Ok(daily) => v.push(daily),
             Err(e) => println!("{}",e)
