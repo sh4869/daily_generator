@@ -48,8 +48,13 @@ impl Daily {
                         div.row-content.buffer {
                             
                             div.info {
+                                div.date {
+                                    p {
+                                        (self.day.format("%Y/%m/%d"))
+                                    }
+                                }
                                 h1 {
-                                    (self.day.format("%Y/%m/%d")) " - " (self.title);
+                                    (self.title);
                                 }
                             }
                             div.daily {
