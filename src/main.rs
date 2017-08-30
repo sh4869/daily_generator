@@ -29,8 +29,7 @@ impl Daily {
 <link rel="stylesheet" href="../../index.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-        "##;
+<script>hljs.initHighlightingOnLoad();</script>"##;
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
         let markup =
             html! {
@@ -39,9 +38,7 @@ impl Daily {
                     meta chaset="utf-8";
                     meta name="viewport" content="width=device-width, initial-scale=1";
                     (PreEscaped(css))
-                    title {
-                        (title)
-                    }
+                    title (title)
                     "\n"
                 }
                 body{
@@ -49,25 +46,17 @@ impl Daily {
                         div.row-content.buffer {
                             div.info {
                                 div.date {
-                                    p {
-                                        (self.day.format("%Y/%m/%d"))
-                                    }
+                                    p (self.day.format("%Y/%m/%d"))
                                 }
-                                h1 {
-                                    (self.title);
-                                }
+                                h1 (self.title);
                             }
                             div.daily {
                                 (PreEscaped(&self.content))
                             }
                             footer {
                                 hr;
-                                a href=("http://sh4869.net/diary") {
-                                    "Daily Bread"
-                                }
-                                p {
-                                    (PreEscaped("&copy; 2017 <a href=\"sh4869.net\">sh4869</a>") )
-                                }
+                                a href=("http://sh4869.net/diary") "Daily Bread"
+                                p (PreEscaped("&copy; 2017 <a href=\"sh4869.net\">sh4869</a>") )
                             }
                         }
                     }
@@ -175,9 +164,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
             meta chaset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
             (PreEscaped(css))
-            title {
-                "Daily Bread"
-            }
+            title "Daily Bread"
         }
         body {
             div.row {
@@ -185,19 +172,15 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                     @for daily in dailies.iter() {
                         div.day {
                             @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
-                            p (daily.day.format("%Y/%m/%d"))
-                            a href=(link){
-                                p.title (daily.title)
+                            div.date {
+                                p (daily.day.format("%Y/%m/%d"))
+                                a href=(link) h1 (daily.title)
                             }
                         }
                     }
                     footer {
-                        a href=("http://sh4869.net/diary") {
-                            "Daily Bread"
-                        }
-                        p {
-                            (PreEscaped("&copy; 2017 <a href=\"sh4869.net\">sh4869</a>") )
-                        }
+                        a href=("http://sh4869.net/diary") "Daily Bread"
+                        p (PreEscaped("&copy; 2017 <a href=\"sh4869.net\">sh4869</a>") )
                     }
                 }
             }

@@ -18,18 +18,20 @@ footer {
 
 .day {
     display: block;
-    border-bottom: 1px solid black;
+    text-align: center;
 }
 
 .day p {
     font-size: 1em;
 }
 
-.day p.title {
-    text-indent: 1em;
-    font-size: 1.5em;
+.day h1 {
+    text-decoration: none;
+    color: #111;
 }
-
+.day a{
+    color: #111;
+}
 
 /* For Daily Pages*/
 
@@ -51,7 +53,7 @@ p {
     margin-bottom: 0.5em;
 }
 
-.info .date p{
+.date p {
     display: inline-block;
     background: black;
     color: white;
