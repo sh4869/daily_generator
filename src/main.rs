@@ -233,10 +233,20 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
     Ok(())
 }
 
+fn copy_css() -> io::Result<()> {
+    fs::copy("src/css/index.css","docs/index.css")?;
+    fs::copy("src/css/layers.min.css","docs/layers.min.css")?;
+    Ok(())
+}
+
 fn build_daily(daily_path: &Path){
     match visit_dirs(daily_path) {
         Ok(()) => println!("All Dailies Build Ended."),
         Err(e) => println!("Error: {}", e.to_string()),
+    }
+    match copy_css() {
+        Ok(()) => println!("Copy CSS"),
+        Err(e) => println!("Error: {}", e.to_string())
     }
 }
 
