@@ -1,2 +1,4 @@
 language: rust
+rust:
+  - nightly
 after_sucess: cargo run && sudo pip install ghp-import && ghp-import -n docs && git push -qf https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
