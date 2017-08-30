@@ -7,4 +7,4 @@ authors = ["sh4869 <nobuk4869@gmail.com>"]
 pulldown-cmark = "0.1.0"
 maud = "*"
 chrono = "0.4"
-glob = "0.2"
+glob = "0.2.11"

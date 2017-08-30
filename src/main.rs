@@ -2,6 +2,7 @@
 extern crate pulldown_cmark;
 extern crate maud;
 extern crate chrono;
+extern crate glob;
 
 use std::io;
 use std::io::{Error, ErrorKind};
@@ -87,7 +88,11 @@ fn get_title(md: &String) -> io::Result<String> {
 }
 
 fn get_date(filepath: &String) -> io::Result<Date<Local>> {
-    let dailystr = filepath.clone().replace("\\", "/").replace(".md", "");
+    let dailystr = filepath
+        .clone()
+        .replace("\\", "/")
+        .replace(".md", "")
+        .replace("diary/", "");
     let dailyv: Vec<&str> = dailystr.split("/").collect();
     let y = try!(dailyv[0].parse::<i32>().map_err(|err| {
         Error::new(ErrorKind::InvalidData, err)
@@ -102,9 +107,26 @@ fn get_date(filepath: &String) -> io::Result<Date<Local>> {
     Ok(date)
 }
 
-fn conver_md(path: &Path) -> io::Result<Daily> {
-    let mut file = File::open(path)?;
+fn convert_markdown(md: &str) -> io::Result<String> {
+    let parser = Parser::new(&md);
+    let mut html_buf = String::new();
+    html::push_html(&mut html_buf, parser);
+    Ok(html_buf)
+}
 
+fn write_day_file(daily: &Daily) -> io::Result<()>{
+    let destpath = "docs/".to_string() + &daily.day.format("%Y/%m/%d").to_string() + &".html";
+    let parent = Path::new(&destpath).parent().unwrap();
+    if parent.exists() == false {
+        fs::create_dir_all(parent.to_str().unwrap())?;
+    }
+    let mut file = File::create(&destpath)?;
+    file.write_all(daily.generate_html().as_bytes())?;
+    Ok(())
+}
+
+fn build_daily(path: &Path) -> io::Result<Daily> {
+    let mut file = File::open(path)?;
     let date;
     match get_date(&path.to_str().unwrap().into()) {
         Ok(d) => date = d,
@@ -113,46 +135,30 @@ fn conver_md(path: &Path) -> io::Result<Daily> {
             return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
         }
     }
-
     let mut daily = Daily {
         content: "".into(),
         title: "".into(),
         day: date,
     };
 
-    println!("Building {}", daily.day);
-
-    // ファイルの中身を読み取る
     let mut content = String::new();
     file.read_to_string(&mut content)?;
-
     // タイトルの取得
     match get_title(&mut content) {
         Ok(s) => daily.title = s,
         Err(e) => println!("Error: {}", e.to_string()),
     }
 
-    // Markdownの本文部分を取得する。
-    let v: Vec<&str> = content.split("---").collect();
-    let md = v[2];
-
-    // MarkdownをParse、HTMLに変換
-    let parser = Parser::new(&md);
-    let mut html_buf = String::new();
-    html::push_html(&mut html_buf, parser);
-    daily.content = html_buf;
-
-    // Make Directory, and Write Files
-    if Path::new("docs/").exists() == false {
-        fs::create_dir("docs/")?;
+    let md = content.split("---").collect::<Vec<&str>>()[2];
+    match convert_markdown(&md) {
+        Ok(md) => daily.content = md,
+        Err(e) => println!("Error: {}", e.to_string()),
     }
-    let destpath = "docs/".to_string() + &daily.day.format("%Y/%m/%d").to_string() + &".html";
-    let parent = Path::new(&destpath).parent().unwrap();
-    if parent.exists() == false {
-        fs::create_dir_all(parent.to_str().unwrap())?;
+    match write_day_file(&daily) {
+        Ok(()) => {},
+        Err(e) => println!("Error: {}", e.to_string()),
     }
-    let mut file = File::create(&destpath)?;
-    file.write_all(daily.generate_html().as_bytes())?;
+    println!(">>>>> Build {}", daily.day.format("%Y/%m/%d"));
     Ok(daily)
 }
 
@@ -197,40 +203,40 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
             }
         }
     };
-    let destpath = "docs/index.html";
-    let mut file = File::create(&destpath)?;
-    //println!("{}",&markup.into_string());
+    let mut file = File::create("docs/index.html")?;
     file.write_all(markup.into_string().as_bytes())?;
     Ok(())
 }
 
-#[allow(unused_must_use)]
-fn visit_dirs(dir: &Path) -> io::Result<()> {
+fn build() -> io::Result<()> {
     let mut paths: Vec<PathBuf> = Vec::new();
-    if dir.is_dir() {
-        for entry in fs::read_dir(dir)? {
-            let entry = entry?;
-            let path = entry.path();
-            if path.is_dir() {
-                for entry in fs::read_dir(path)? {
-                    let entry = entry?;
-                    let path = entry.path();
-                    paths.push(path);
-                }
-            } else {
-                paths.push(path);
-            }
+    for entry in glob::glob("diary/**/*.md").map_err(|err| {
+        Error::new(ErrorKind::InvalidData, err)
+    })?
+    {
+        match entry {
+            Ok(path) => paths.push(path),
+            Err(e) => println!("{}", e.to_string()),
         }
     }
     let mut v: Vec<Daily> = Vec::new();
     for path in paths {
-        match conver_md(path.as_path()) {
+        match build_daily(path.as_path()) {
             Ok(daily) => v.push(daily),
             Err(e) => println!("{}", e),
         }
     }
-    // build_monthly_page(&mut v);
-    build_top_page(&mut v);
+    match build_top_page(&mut v) {
+        Ok(()) => println!(">>> Build toppage"),
+        Err(e) => println!("Error: {}", e.to_string()),
+    }
+    Ok(())
+}
+
+fn prepar_dir() -> io::Result<()> {
+    if Path::new("docs/").exists() == false {
+        fs::create_dir("docs/")?;
+    }
     Ok(())
 }
 
@@ -240,17 +246,17 @@ fn copy_css() -> io::Result<()> {
     Ok(())
 }
 
-fn build_daily(daily_path: &Path) {
-    match visit_dirs(daily_path) {
-        Ok(()) => println!("All Dailies Build Ended."),
+fn main() {
+    match prepar_dir() {
+        Ok(()) => println!(">>> Create docs directory"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     match copy_css() {
-        Ok(()) => println!("Copy CSS"),
+        Ok(()) => println!(">>> Copied css files."),
         Err(e) => println!("Error: {}", e.to_string()),
     }
-}
-
-fn main() {
-    build_daily(Path::new("2017/"));
+    match build() {
+        Ok(()) => println!(">>> All Dailies build ended."),
+        Err(e) => println!("Error: {}", e.to_string()),
+    }
 }
