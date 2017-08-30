@@ -85,7 +85,6 @@ fn get_title(md: &String) -> io::Result<String> {
 fn get_date(filepath: &String) -> io::Result<Date<Local>> {
     let dailystr = filepath.clone().replace("\\", "/").replace(".md", "");
     let dailyv: Vec<&str> = dailystr.split("/").collect();
-    println!("{},{},{}",dailyv[0],dailyv[1],dailyv[2]);
     let y = try!(dailyv[0].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
     let m = try!(dailyv[1].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
     let d = try!(dailyv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
@@ -146,13 +145,6 @@ fn conver_md(path: &Path) -> io::Result<Daily> {
     file.write_all(daily.generate_html().as_bytes())?;
     Ok(daily)
 }
-
-/*
-fn build_monthly_page(dailies: &mut Vec<Daily>){
-
-    
-}
-*/
 
 fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()>{
     dailies.sort_by(|a,b| b.day.cmp(&a.day));
@@ -222,7 +214,6 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
     }
     let mut v: Vec<Daily> = Vec::new();
     for path in paths {
-        println!("{}",path.to_str().unwrap());
         match conver_md(path.as_path()) {
             Ok(daily) => v.push(daily),
             Err(e) => println!("{}",e)
