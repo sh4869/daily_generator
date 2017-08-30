@@ -4,6 +4,7 @@ extern crate maud;
 extern crate chrono;
 
 use std::io;
+use std::io::{Error, ErrorKind};
 use std::fs::{self, File};
 use std::io::prelude::*;
 use std::path::{Path,PathBuf};
@@ -81,11 +82,14 @@ fn get_title(md: &String) -> io::Result<String> {
     )
 }
 
-fn get_date(filepath: &String) -> Date<Local> {
+fn get_date(filepath: &String) -> io::Result<Date<Local>> {
     let dailystr = filepath.clone().replace("\\", "/").replace(".md", "");
     let dailyv: Vec<&str> = dailystr.split("/").collect();
-    let date = Local.ymd(dailyv[0].parse::<i32>().unwrap(),dailyv[1].parse::<u32>().unwrap(),dailyv[2].parse::<u32>().unwrap());
-    date
+    let y = try!(dailyv[0].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
+    let m = try!(dailyv[1].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
+    let d = try!(dailyv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
+    let date = Local.ymd(y,m,d);
+    Ok(date)
 }
 
 fn conver_md(path: &Path) -> io::Result<Daily> {
@@ -98,8 +102,14 @@ fn conver_md(path: &Path) -> io::Result<Daily> {
         &(rootdir.as_path().to_str().unwrap().to_string() + &"\\".to_string()),
         "",
     );
-
-    let date = get_date(&filepath);
+    let date;
+    match get_date(&filepath) {
+        Ok(d) => date = d,
+        Err(e) => {
+            println!("{}",e.to_string());
+            return Err(Error::new(ErrorKind::InvalidData,e.to_string()));
+        }
+    }
 
     let mut daily = Daily {
         content: "".into(),
@@ -218,7 +228,6 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
     }
     let mut v: Vec<Daily> = Vec::new();
     for path in paths {
-        println!("{}",path.to_str().unwrap());
         match conver_md(fs::canonicalize(path)?.as_path()) {
             Ok(daily) => v.push(daily),
             Err(e) => println!("{}",e)
