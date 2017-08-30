@@ -85,6 +85,7 @@ fn get_title(md: &String) -> io::Result<String> {
 fn get_date(filepath: &String) -> io::Result<Date<Local>> {
     let dailystr = filepath.clone().replace("\\", "/").replace(".md", "");
     let dailyv: Vec<&str> = dailystr.split("/").collect();
+    println!("{},{},{}",dailyv[0],dailyv[1],dailyv[2]);
     let y = try!(dailyv[0].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
     let m = try!(dailyv[1].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
     let d = try!(dailyv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
