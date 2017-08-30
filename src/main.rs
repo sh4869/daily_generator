@@ -7,11 +7,11 @@ use std::io;
 use std::io::{Error, ErrorKind};
 use std::fs::{self, File};
 use std::io::prelude::*;
-use std::path::{Path,PathBuf};
+use std::path::{Path, PathBuf};
 
 use pulldown_cmark::{html, Parser};
 use maud::{html, PreEscaped};
-use chrono::{Local,Date,TimeZone};
+use chrono::{Local, Date, TimeZone};
 
 
 struct Daily {
@@ -23,12 +23,12 @@ struct Daily {
 impl Daily {
     fn generate_html(&self) -> String {
         let css = r##"
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
-        <link rel="stylesheet" href="../../layers.min.css" />
-        <link rel="stylesheet" href="../../index.css"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css" />
-        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css"/>
+<link rel="stylesheet" href="../../layers.min.css" />
+<link rel="stylesheet" href="../../index.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
         "##;
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
         let markup =
@@ -46,7 +46,6 @@ impl Daily {
                 body{
                     div.row {
                         div.row-content.buffer {
-                            
                             div.info {
                                 div.date {
                                     p {
@@ -90,10 +89,16 @@ fn get_title(md: &String) -> io::Result<String> {
 fn get_date(filepath: &String) -> io::Result<Date<Local>> {
     let dailystr = filepath.clone().replace("\\", "/").replace(".md", "");
     let dailyv: Vec<&str> = dailystr.split("/").collect();
-    let y = try!(dailyv[0].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
-    let m = try!(dailyv[1].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
-    let d = try!(dailyv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData,err)));
-    let date = Local.ymd(y,m,d);
+    let y = try!(dailyv[0].parse::<i32>().map_err(|err| {
+        Error::new(ErrorKind::InvalidData, err)
+    }));
+    let m = try!(dailyv[1].parse::<u32>().map_err(|err| {
+        Error::new(ErrorKind::InvalidData, err)
+    }));
+    let d = try!(dailyv[2].parse::<u32>().map_err(|err| {
+        Error::new(ErrorKind::InvalidData, err)
+    }));
+    let date = Local.ymd(y, m, d);
     Ok(date)
 }
 
@@ -104,8 +109,8 @@ fn conver_md(path: &Path) -> io::Result<Daily> {
     match get_date(&path.to_str().unwrap().into()) {
         Ok(d) => date = d,
         Err(e) => {
-            println!("{}",e.to_string());
-            return Err(Error::new(ErrorKind::InvalidData,e.to_string()));
+            println!("{}", e.to_string());
+            return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
         }
     }
 
@@ -115,7 +120,7 @@ fn conver_md(path: &Path) -> io::Result<Daily> {
         day: date,
     };
 
-    println!("Building {}",daily.day);
+    println!("Building {}", daily.day);
 
     // ファイルの中身を読み取る
     let mut content = String::new();
@@ -151,15 +156,15 @@ fn conver_md(path: &Path) -> io::Result<Daily> {
     Ok(daily)
 }
 
-fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()>{
-    dailies.sort_by(|a,b| b.day.cmp(&a.day));
+fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
+    dailies.sort_by(|a, b| b.day.cmp(&a.day));
     let css = r##"
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
     <link rel="stylesheet" href="layers.min.css" />
     <link rel="stylesheet" href="index.css"/>
     "##;
-    let markup = 
-    html! {
+    let markup =
+        html! {
         head {
             meta chaset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
@@ -221,7 +226,7 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
     for path in paths {
         match conver_md(path.as_path()) {
             Ok(daily) => v.push(daily),
-            Err(e) => println!("{}",e)
+            Err(e) => println!("{}", e),
         }
     }
     // build_monthly_page(&mut v);
@@ -230,19 +235,19 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
 }
 
 fn copy_css() -> io::Result<()> {
-    fs::copy("src/css/index.css","docs/index.css")?;
-    fs::copy("src/css/layers.min.css","docs/layers.min.css")?;
+    fs::copy("src/css/index.css", "docs/index.css")?;
+    fs::copy("src/css/layers.min.css", "docs/layers.min.css")?;
     Ok(())
 }
 
-fn build_daily(daily_path: &Path){
+fn build_daily(daily_path: &Path) {
     match visit_dirs(daily_path) {
         Ok(()) => println!("All Dailies Build Ended."),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     match copy_css() {
         Ok(()) => println!("Copy CSS"),
-        Err(e) => println!("Error: {}", e.to_string())
+        Err(e) => println!("Error: {}", e.to_string()),
     }
 }
 
