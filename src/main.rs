@@ -56,7 +56,7 @@ impl Daily {
                             footer {
                                 hr;
                                 a href=("http://sh4869.net/diary") "Daily Bread"
-                                p (PreEscaped("&copy; 2017 <a href=\"sh4869.net\">sh4869</a>") )
+                                p (PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )
                             }
                         }
                     }
@@ -180,7 +180,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                     }
                     footer {
                         a href=("http://sh4869.net/diary") "Daily Bread"
-                        p (PreEscaped("&copy; 2017 <a href=\"sh4869.net\">sh4869</a>") )
+                        p (PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )
                     }
                 }
             }
