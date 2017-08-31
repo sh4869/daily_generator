@@ -1,5 +1,5 @@
 [package]
-name = "daily"
+name = "diary-generator"
 version = "0.1.0"
 authors = ["sh4869 <nobuk4869@gmail.com>"]
 
