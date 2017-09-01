@@ -26,6 +26,7 @@ impl Daily {
         let css = r##"
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css"/>
 <link rel="stylesheet" href="../../layers.min.css" />
+<link rel="stylesheet" href="../../layers.section.min.css" />
 <link rel="stylesheet" href="../../index.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
@@ -103,7 +104,7 @@ fn convert_markdown(md: &str) -> io::Result<String> {
     Ok(html_buf)
 }
 
-fn write_day_file(daily: &Daily) -> io::Result<()>{
+fn write_day_file(daily: &Daily) -> io::Result<()> {
     let destpath = "docs/".to_string() + &daily.day.format("%Y/%m/%d").to_string() + &".html";
     let parent = Path::new(&destpath).parent().unwrap();
     if parent.exists() == false {
@@ -144,7 +145,7 @@ fn build_daily(path: &Path) -> io::Result<Daily> {
         Err(e) => println!("Error: {}", e.to_string()),
     }
     match write_day_file(&daily) {
-        Ok(()) => {},
+        Ok(()) => {}
         Err(e) => println!("Error: {}", e.to_string()),
     }
     println!(">>>>> Build {}", daily.day.format("%Y/%m/%d"));
@@ -155,6 +156,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
     dailies.sort_by(|a, b| b.day.cmp(&a.day));
     let css = r##"
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
+    <link rel="stylesheet" href="layers.section.min.css" />
     <link rel="stylesheet" href="layers.min.css" />
     <link rel="stylesheet" href="index.css"/>
     "##;
@@ -169,12 +171,33 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
         body {
             div.row {
                 div.row-content.buffer {
-                    @for daily in dailies.iter() {
-                        div.day {
-                            @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
-                            div.date {
-                                p (daily.day.format("%Y/%m/%d"))
-                                a href=(link) h1 (daily.title)
+                    div.column.twelve.top {
+                        img src="logo.png";
+                    }
+                    div.clear;
+                    @for (i,daily) in dailies.iter().enumerate() {
+                        @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
+                        @if i % 2 == 0 {
+                            div.column.half {
+                                div.day {
+                                    a href=(link) {
+                                        div.date {
+                                            p (daily.day.format("%Y/%m/%d"))
+                                        }
+                                        h1 (daily.title)
+                                    }
+                                }
+                            }
+                        } @else {
+                            div.column.half.last {
+                                div.day {
+                                    a href=(link) {
+                                        div.date {
+                                            p (daily.day.format("%Y/%m/%d"))
+                                        }
+                                        h1 (daily.title)
+                                    }
+                                }
                             }
                         }
                     }
@@ -223,9 +246,11 @@ fn prepar_dir() -> io::Result<()> {
     Ok(())
 }
 
-fn copy_css() -> io::Result<()> {
+fn copy_css_image() -> io::Result<()> {
     fs::copy("src/css/index.css", "docs/index.css")?;
     fs::copy("src/css/layers.min.css", "docs/layers.min.css")?;
+    fs::copy("src/css/layers.section.min.css","docs/layers.section.min.css")?;
+    fs::copy("src/img/logo.png","docs/logo.png")?;
     Ok(())
 }
 
@@ -234,7 +259,7 @@ fn main() {
         Ok(()) => println!(">>> Create docs directory"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
-    match copy_css() {
+    match copy_css_image() {
         Ok(()) => println!(">>> Copied css files."),
         Err(e) => println!("Error: {}", e.to_string()),
     }
