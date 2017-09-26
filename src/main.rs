@@ -14,7 +14,6 @@ use pulldown_cmark::{html, Parser};
 use maud::{html, PreEscaped};
 use chrono::{Local, Date, TimeZone};
 
-
 struct Daily {
     day: Date<Local>,
     title: String,
@@ -56,7 +55,9 @@ impl Daily {
                             }
                             footer {
                                 hr;
-                                a href=("http://sh4869.net/diary") "Daily Bread"
+                                a href=("http://sh4869.net/diary") {
+                                    img src="../../logo.png";
+                                }
                                 p (PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )
                             }
                         }
@@ -249,8 +250,11 @@ fn prepar_dir() -> io::Result<()> {
 fn copy_css_image() -> io::Result<()> {
     fs::copy("src/css/index.css", "docs/index.css")?;
     fs::copy("src/css/layers.min.css", "docs/layers.min.css")?;
-    fs::copy("src/css/layers.section.min.css","docs/layers.section.min.css")?;
-    fs::copy("src/img/logo.png","docs/logo.png")?;
+    fs::copy(
+        "src/css/layers.section.min.css",
+        "docs/layers.section.min.css",
+    )?;
+    fs::copy("src/img/logo.png", "docs/logo.png")?;
     Ok(())
 }
 
