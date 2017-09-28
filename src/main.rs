@@ -44,6 +44,12 @@ impl Daily {
                 body{
                     div.row {
                         div.row-content.buffer {
+                            div.column.twelve.top#header {
+                                a href=("/") {
+                                    img src="/logo.png";
+                                }
+                            }
+                            div.clear;
                             div.info {
                                 div.date {
                                     p (self.day.format("%Y/%m/%d"))
@@ -55,9 +61,7 @@ impl Daily {
                             }
                             footer {
                                 hr;
-                                a href=("/") {
-                                    img src="../../logo.png";
-                                }
+                                a href=("/") "Daily Bread"
                                 p (PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )
                             }
                         }
@@ -172,8 +176,10 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
         body {
             div.row {
                 div.row-content.buffer {
-                    div.column.twelve.top {
-                        img src="logo.png";
+                    div.column.twelve.top#header {
+                        a href=("/") {
+                            img src="/logo.png";
+                        }
                     }
                     div.clear;
                     @for (i,daily) in dailies.iter().enumerate() {
