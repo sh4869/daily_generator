@@ -1,6 +1,6 @@
-@import "https://fonts.googleapis.com/earlyaccess/notosansjapanese.css";
+@import "https://fonts.googleapis.com/earlyaccess/mplus1p.css";
 body {
-    font-family: "Noto Sans Japanese";
+    font-family: "Mplus 1p";
     background: #fcffff;
     max-width: 1200px;
     margin: 0 auto;
@@ -93,7 +93,7 @@ p {
 }
 
 .daily p {
-    text-indent: 1em;
+    padding-left: 1em;
 }
 
 .daily h1 {
@@ -104,6 +104,7 @@ p {
 .daily h2 {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
+
 }
 
 .daily h3 {
