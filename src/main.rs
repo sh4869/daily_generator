@@ -80,7 +80,9 @@ s.setAttribute('data-timestamp', +new Date());
                             }
                             div.daily {
                                 (PreEscaped(&self.content))
-                                hr;
+                                div.signature {
+                                    p ("Written by sh4869");
+                                }
                                 (PreEscaped(disqus))
                             }
                             footer {

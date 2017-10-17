@@ -111,3 +111,9 @@ p {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
+
+.signature {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    text-align: right;
+}
