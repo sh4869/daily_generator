@@ -12,7 +12,7 @@ use std::path::{Path, PathBuf};
 
 use pulldown_cmark::{html, Parser};
 use maud::{html, PreEscaped};
-use chrono::{Local, Date, TimeZone};
+use chrono::{Date, Local, TimeZone};
 
 struct Daily {
     day: Date<Local>,
@@ -53,8 +53,7 @@ s.setAttribute('data-timestamp', +new Date());
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                             "##;
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
-        let markup =
-            html! {
+        let markup = html! {
             html {
                 head {
                     meta chaset="utf-8";
@@ -115,15 +114,21 @@ fn get_date(filepath: &String) -> io::Result<Date<Local>> {
         .replace(".md", "")
         .replace("diary/", "");
     let dailyv: Vec<&str> = dailystr.split("/").collect();
-    let y = try!(dailyv[0].parse::<i32>().map_err(|err| {
-        Error::new(ErrorKind::InvalidData, err)
-    }));
-    let m = try!(dailyv[1].parse::<u32>().map_err(|err| {
-        Error::new(ErrorKind::InvalidData, err)
-    }));
-    let d = try!(dailyv[2].parse::<u32>().map_err(|err| {
-        Error::new(ErrorKind::InvalidData, err)
-    }));
+    let y = try!(
+        dailyv[0]
+            .parse::<i32>()
+            .map_err(|err| { Error::new(ErrorKind::InvalidData, err) })
+    );
+    let m = try!(
+        dailyv[1]
+            .parse::<u32>()
+            .map_err(|err| { Error::new(ErrorKind::InvalidData, err) })
+    );
+    let d = try!(
+        dailyv[2]
+            .parse::<u32>()
+            .map_err(|err| { Error::new(ErrorKind::InvalidData, err) })
+    );
     let date = Local.ymd(y, m, d);
     Ok(date)
 }
@@ -191,8 +196,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
     <link rel="stylesheet" href="layers.min.css" />
     <link rel="stylesheet" href="index.css"/>
     "##;
-    let markup =
-        html! {
+    let markup = html! {
         head {
             meta chaset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
@@ -249,9 +253,8 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
 
 fn build() -> io::Result<()> {
     let mut paths: Vec<PathBuf> = Vec::new();
-    for entry in glob::glob("diary/**/*.md").map_err(|err| {
-        Error::new(ErrorKind::InvalidData, err)
-    })?
+    for entry in glob::glob("diary/**/*.md")
+        .map_err(|err| Error::new(ErrorKind::InvalidData, err))?
     {
         match entry {
             Ok(path) => paths.push(path),
@@ -290,7 +293,10 @@ fn copy_css_image() -> io::Result<()> {
     Ok(())
 }
 
+
+
 fn main() {
+
     match prepar_dir() {
         Ok(()) => println!(">>> Create docs directory"),
         Err(e) => println!("Error: {}", e.to_string()),
