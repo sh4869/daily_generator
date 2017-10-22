@@ -117,3 +117,7 @@ p {
     margin-bottom: 1.5em;
     text-align: right;
 }
+
+.center {
+    text-align: center;
+}
