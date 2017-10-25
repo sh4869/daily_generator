@@ -20,18 +20,24 @@ body {
 footer {
     text-align: center;
 }
+
+
 /* Over Ride */
 
 .row-content.buffer {
     padding-right: 15%;
     padding-left: 15%;
 }
+
+
 /* For TopPage */
+
 .top {
     text-align: center;
     margin-top: 0em;
     margin-bottom: 5em;
 }
+
 .day {
     display: block;
     text-align: center;
@@ -44,18 +50,20 @@ footer {
     margin-top: 0.2em;
     display: inline-block;
 }
-.day a{
+
+.day a {
     text-decoration: none;
     color: #111;
 }
 
-.day a:hover{
+.day a:hover {
     text-decoration: underline;
 }
 
 .column.last {
     margin-top: 2.5em;
 }
+
 
 /* For Daily Pages*/
 
@@ -104,7 +112,6 @@ p {
 .daily h2 {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
-
 }
 
 .daily h3 {
@@ -120,4 +127,14 @@ p {
 
 .center {
     text-align: center;
+}
+
+code,
+tt {
+    margin: 0 2px;
+    padding: 0 5px;
+    white-space: nowrap;
+    border: 1px solid #eaeaea;
+    background-color: #f8f8f8;
+    border-radius: 3px;
 }
