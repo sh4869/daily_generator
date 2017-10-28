@@ -22,27 +22,20 @@ struct Daily {
 
 impl Daily {
     fn generate_html(&self) -> String {
-        let css = r##"
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css"/>
-<link rel="stylesheet" href="../../layers.min.css" />
-<link rel="stylesheet" href="../../layers.section.min.css" />
-<link rel="stylesheet" href="../../index.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css"/>
+        let higlightjs = r##"
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>"##;
+        let csslist = [
+            "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css",
+            "/layers.min.css",
+            "/layers.section.min.css",
+            "/index.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css",
+        ];
         let disqus = r##"
 <div id="disqus_thread"></div>
 <script>
 
-/**
-*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-/*
-var disqus_config = function () {
-this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-};
-*/
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
 s.src = 'https://diary-sh4869-net.disqus.com/embed.js';
@@ -53,14 +46,17 @@ s.setAttribute('data-timestamp', +new Date());
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                             "##;
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
-        let markup = html! {
+        let markup =
+            html! {
             html {
                 head {
                     meta chaset="utf-8";
                     meta name="viewport" content="width=device-width, initial-scale=1";
-                    (PreEscaped(css))
+                    @for url in &csslist {
+                        link rel="stylesheet" href=(url);
+                    }
+                    (PreEscaped(higlightjs))
                     title (title)
-                    "\n"
                 }
                 body{
                     div.row {
@@ -114,21 +110,15 @@ fn get_date(filepath: &String) -> io::Result<Date<Local>> {
         .replace(".md", "")
         .replace("diary/", "");
     let dailyv: Vec<&str> = dailystr.split("/").collect();
-    let y = try!(
-        dailyv[0]
-            .parse::<i32>()
-            .map_err(|err| { Error::new(ErrorKind::InvalidData, err) })
-    );
-    let m = try!(
-        dailyv[1]
-            .parse::<u32>()
-            .map_err(|err| { Error::new(ErrorKind::InvalidData, err) })
-    );
-    let d = try!(
-        dailyv[2]
-            .parse::<u32>()
-            .map_err(|err| { Error::new(ErrorKind::InvalidData, err) })
-    );
+    let y = try!(dailyv[0].parse::<i32>().map_err(|err| {
+        Error::new(ErrorKind::InvalidData, err)
+    }));
+    let m = try!(dailyv[1].parse::<u32>().map_err(|err| {
+        Error::new(ErrorKind::InvalidData, err)
+    }));
+    let d = try!(dailyv[2].parse::<u32>().map_err(|err| {
+        Error::new(ErrorKind::InvalidData, err)
+    }));
     let date = Local.ymd(y, m, d);
     Ok(date)
 }
@@ -196,7 +186,8 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
     <link rel="stylesheet" href="layers.min.css" />
     <link rel="stylesheet" href="index.css"/>
     "##;
-    let markup = html! {
+    let markup =
+        html! {
         head {
             meta chaset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
@@ -253,8 +244,9 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
 
 fn build() -> io::Result<()> {
     let mut paths: Vec<PathBuf> = Vec::new();
-    for entry in glob::glob("diary/**/*.md")
-        .map_err(|err| Error::new(ErrorKind::InvalidData, err))?
+    for entry in glob::glob("diary/**/*.md").map_err(|err| {
+        Error::new(ErrorKind::InvalidData, err)
+    })?
     {
         match entry {
             Ok(path) => paths.push(path),
