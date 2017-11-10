@@ -68,9 +68,7 @@ s.setAttribute('data-timestamp', +new Date());
                             }
                             div.clear;
                             div.info {
-                                div.date {
-                                    p (self.day.format("%Y/%m/%d"))
-                                }
+                                time (self.day.format("%Y/%m/%d"));
                                 h1 (self.title);
                             }
                             div.daily {
@@ -209,9 +207,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                             div.column.half {
                                 div.day {
                                     a href=(link) {
-                                        div.date {
-                                            p (daily.day.format("%Y/%m/%d"))
-                                        }
+                                        time (daily.day.format("%Y/%m/%d"));
                                         h1 (daily.title)
                                     }
                                 }
@@ -220,9 +216,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                             div.column.half.last {
                                 div.day {
                                     a href=(link) {
-                                        div.date {
-                                            p (daily.day.format("%Y/%m/%d"))
-                                        }
+                                        time (daily.day.format("%Y/%m/%d"));
                                         h1 (daily.title)
                                     }
                                 }
