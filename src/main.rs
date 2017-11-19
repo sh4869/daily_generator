@@ -66,7 +66,9 @@ s.setAttribute('data-timestamp', +new Date());
                                     img src="/logo.png";
                                 }
                             }
-                            div.clear;
+                            div.clear {
+                                
+                            }
                             div.info {
                                 time (self.day.format("%Y/%m/%d"));
                                 h1 (self.title);
