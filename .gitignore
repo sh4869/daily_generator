@@ -3,4 +3,5 @@
 Cargo.lock
 dest/
 docs/
+.vscode/
 .firebaserc
