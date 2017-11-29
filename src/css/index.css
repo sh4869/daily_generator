@@ -22,16 +22,7 @@ body {
 footer {
     text-align: center;
 }
-
-/* Over Ride */
-
-.row-content.buffer {
-    padding-right: 15%;
-    padding-left: 15%;
-}
-
 /* For TopPage */
-
 .top {
     text-align: center;
     margin-top: 0em;

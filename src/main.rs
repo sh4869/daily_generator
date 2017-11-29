@@ -202,11 +202,13 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                             img src="/logo.png";
                         }
                     }
-                    div.clear;
+                    div.clear {
+                        
+                    }
                     @for (i,daily) in dailies.iter().enumerate() {
                         @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
                         @if i % 2 == 0 {
-                            div.column.half {
+                            div.column.small-full.medium-half.large-half {
                                 div.day {
                                     a href=(link) {
                                         time (daily.day.format("%Y/%m/%d"));
@@ -215,7 +217,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                                 }
                             }
                         } @else {
-                            div.column.half.last {
+                            div.column.small-full.medium-half.medium-last {
                                 div.day {
                                     a href=(link) {
                                         time (daily.day.format("%Y/%m/%d"));
