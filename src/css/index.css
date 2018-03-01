@@ -1,17 +1,16 @@
-@import "https://fonts.googleapis.com/earlyaccess/mplus1p.css";
+@import "https://fonts.googleapis.com/earlyaccess/sawarabigothic.css";
 @import 'https://fonts.googleapis.com/css?family=Kelly+Slab';
 
 body {
-    font-family: "Mplus 1p";
+    font-family: "Sawarabi Gothic",sans-serif;
     background: #fcffff;
-    max-width: 1200px;
+    max-width: 900px;
     margin: 0 auto;
     font-size: 1.1em;
 }
 
 #header {
     margin-top: 5em;
-    margin-bottom: 5em;
 }
 
 .container {
@@ -35,6 +34,11 @@ footer {
     margin-bottom: 0.5em;
 }
 
+.day a {
+    text-decoration: none;
+    color: #111;
+}
+
 .day h1 {
     display: block;
     text-decoration: none;
@@ -42,10 +46,6 @@ footer {
     margin-top: 0.2em;
 }
 
-.day a {
-    text-decoration: none;
-    color: #111;
-}
 
 .day a:hover {
     text-decoration: underline;
@@ -81,7 +81,7 @@ time {
     display: inline-block;
     text-decoration: underline;
     padding: 0.3em 0.5em;
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: 600;
     margin: 0;
 }

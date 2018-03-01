@@ -210,8 +210,8 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                         @if i % 2 == 0 {
                             div.column.small-full.medium-half.large-half {
                                 div.day {
+                                    time (daily.day.format("%Y/%m/%d"));
                                     a href=(link) {
-                                        time (daily.day.format("%Y/%m/%d"));
                                         h1 (daily.title)
                                     }
                                 }
@@ -219,8 +219,8 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                         } @else {
                             div.column.small-full.medium-half.medium-last {
                                 div.day {
+                                    time (daily.day.format("%Y/%m/%d"));
                                     a href=(link) {
-                                        time (daily.day.format("%Y/%m/%d"));
                                         h1 (daily.title)
                                     }
                                 }
