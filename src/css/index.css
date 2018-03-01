@@ -1,5 +1,5 @@
 @import "https://fonts.googleapis.com/earlyaccess/sawarabigothic.css";
-@import 'https://fonts.googleapis.com/css?family=Kelly+Slab';
+@import 'https://fonts.googleapis.com/css?family=Caveat|Kelly+Slab';
 
 body {
     font-family: "Sawarabi Gothic",sans-serif;
@@ -9,8 +9,15 @@ body {
     font-size: 1.1em;
 }
 
-#header {
-    margin-top: 5em;
+#header a {
+    text-decoration: none;
+}
+
+#header h1.title {
+    margin-top: 0.5em;
+    color: black;
+    font-size: 5em;
+    font-family: 'Caveat', cursive;;
 }
 
 .container {
@@ -25,7 +32,6 @@ footer {
 .top {
     text-align: center;
     margin-top: 0em;
-    margin-bottom: 5em;
 }
 
 .day {

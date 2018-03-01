@@ -63,7 +63,7 @@ s.setAttribute('data-timestamp', +new Date());
                         div.row-content.buffer {
                             div.column.twelve.top#header {
                                 a href=("/") {
-                                    img src="/logo.png";
+                                    h1.title "Daily Bread"
                                 }
                             }
                             div.clear {
@@ -199,7 +199,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                 div.row-content.buffer {
                     div.column.twelve.top#header {
                         a href=("/") {
-                            img src="/logo.png";
+                            h1.title "Daily Bread"
                         }
                     }
                     div.clear {
