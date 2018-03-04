@@ -135,3 +135,10 @@ tt {
     background-color: #f8f8f8;
     border-radius: 3px;
 }
+iframe,twitterwidget {
+    margin: auto;
+}
+
+img {
+    border: 1px solid #c3c3c3;
+}
