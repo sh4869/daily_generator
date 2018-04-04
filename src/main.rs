@@ -10,7 +10,7 @@ use std::fs::{self, File};
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 
-use pulldown_cmark::{html, Parser};
+use pulldown_cmark::{html, Parser,Options};
 use maud::{html, PreEscaped};
 use chrono::{Date, Local, TimeZone};
 
@@ -124,7 +124,7 @@ fn get_date(filepath: &String) -> io::Result<Date<Local>> {
 }
 
 fn convert_markdown(md: &str) -> io::Result<String> {
-    let parser = Parser::new(&md);
+    let parser = Parser::new_ext(&md,Options::all());
     let mut html_buf = String::new();
     html::push_html(&mut html_buf, parser);
     Ok(html_buf)
@@ -165,7 +165,7 @@ fn build_daily(path: &Path) -> io::Result<Daily> {
         Err(e) => println!("Error: {}", e.to_string()),
     }
 
-    let md = content.split("---").collect::<Vec<&str>>()[2];
+    let md = content.splitn(3,"---").collect::<Vec<&str>>()[2];
     match convert_markdown(&md) {
         Ok(md) => daily.content = md,
         Err(e) => println!("Error: {}", e.to_string()),

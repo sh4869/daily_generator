@@ -1,10 +1,10 @@
 [package]
 name = "diary-generator"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["sh4869 <nobuk4869@gmail.com>"]
 
 [dependencies]
-pulldown-cmark = "0.1.0"
+pulldown-cmark = "0.1.2"
 maud = "*"
 chrono = "0.4"
 glob = "0.2.11"
