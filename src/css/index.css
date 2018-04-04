@@ -8,6 +8,13 @@ body {
     margin: 0 auto;
     font-size: 1.1em;
 }
+table {
+    width: inherit;
+    margin-left: 1em;
+}
+td,th {
+    padding: 0em;
+}
 
 #header a {
     text-decoration: none;
@@ -141,4 +148,13 @@ iframe,twitterwidget {
 
 img {
     border: 1px solid #c3c3c3;
+}
+
+.footnote-definition:first-of-type {
+    margin-top: 3em;
+    border-top: black solid 1px;
+}
+
+.footnote-definition-label {
+    top: 1em;
 }
