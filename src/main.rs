@@ -212,7 +212,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                                 div.day {
                                     time (daily.day.format("%Y/%m/%d"));
                                     a href=(link) {
-                                        h1 (daily.title)
+                                        h2 (daily.title)
                                     }
                                 }
                             }
@@ -221,7 +221,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                                 div.day {
                                     time (daily.day.format("%Y/%m/%d"));
                                     a href=(link) {
-                                        h1 (daily.title)
+                                        h2 (daily.title)
                                     }
                                 }
                             }
