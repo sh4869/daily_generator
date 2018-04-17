@@ -265,7 +265,7 @@ fn build() -> io::Result<()> {
     Ok(())
 }
 
-fn prepar_dir() -> io::Result<()> {
+fn prepear_dir() -> io::Result<()> {
     if Path::new("docs/").exists() == false {
         fs::create_dir("docs/")?;
     }
@@ -287,7 +287,7 @@ fn copy_css_image() -> io::Result<()> {
 
 fn main() {
 
-    match prepar_dir() {
+    match prepear_dir() {
         Ok(()) => println!(">>> Create docs directory"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
