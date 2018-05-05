@@ -5,6 +5,6 @@ authors = ["sh4869 <nobuk4869@gmail.com>"]
 
 [dependencies]
 pulldown-cmark = "0.1.2"
-maud = { git = "https://github.com/anxiousmodernman/maud.git", branch = "121_proc_macro", features = ["rocket"] }
+maud = "0.17.4"
 chrono = "0.4"
 glob = "0.2.11"
