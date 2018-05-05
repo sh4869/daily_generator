@@ -1,4 +1,5 @@
 #![feature(proc_macro)]
+#![feature(proc_macro_non_items)] 
 extern crate pulldown_cmark;
 extern crate maud;
 extern crate chrono;
