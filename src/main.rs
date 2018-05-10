@@ -1,19 +1,19 @@
 #![feature(proc_macro)]
-#![feature(proc_macro_non_items)] 
-extern crate pulldown_cmark;
-extern crate maud;
+#![feature(proc_macro_non_items)]
 extern crate chrono;
 extern crate glob;
+extern crate maud;
+extern crate pulldown_cmark;
 
-use std::io;
-use std::io::{Error, ErrorKind};
 use std::fs::{self, File};
+use std::io;
 use std::io::prelude::*;
+use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
 
-use pulldown_cmark::{html, Parser,Options};
-use maud::{html, PreEscaped};
 use chrono::{Date, Local, TimeZone};
+use maud::{html, PreEscaped};
+use pulldown_cmark::{html, Options, Parser};
 
 struct Daily {
     day: Date<Local>,
@@ -47,8 +47,7 @@ s.setAttribute('data-timestamp', +new Date());
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                             "##;
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
-        let markup =
-            html! {
+        let markup = html! {
             html {
                 head {
                     meta chaset="utf-8";
@@ -68,7 +67,7 @@ s.setAttribute('data-timestamp', +new Date());
                                 }
                             }
                             div.clear {
-                                
+
                             }
                             div.info {
                                 time (self.day.format("%Y/%m/%d"));
@@ -97,35 +96,21 @@ s.setAttribute('data-timestamp', +new Date());
 
 fn get_title(md: &String) -> io::Result<String> {
     let v: Vec<&str> = md.split("---").collect();
-    Ok(
-        (v[1].split("title:").collect::<Vec<&str>>())[1]
-            .trim()
-            .into(),
-    )
+    Ok((v[1].split("title:").collect::<Vec<&str>>())[1].trim().into())
 }
 
 fn get_date(filepath: &String) -> io::Result<Date<Local>> {
-    let dailystr = filepath
-        .clone()
-        .replace("\\", "/")
-        .replace(".md", "")
-        .replace("diary/", "");
+    let dailystr = filepath.clone().replace("\\", "/").replace(".md", "").replace("diary/", "");
     let dailyv: Vec<&str> = dailystr.split("/").collect();
-    let y = try!(dailyv[0].parse::<i32>().map_err(|err| {
-        Error::new(ErrorKind::InvalidData, err)
-    }));
-    let m = try!(dailyv[1].parse::<u32>().map_err(|err| {
-        Error::new(ErrorKind::InvalidData, err)
-    }));
-    let d = try!(dailyv[2].parse::<u32>().map_err(|err| {
-        Error::new(ErrorKind::InvalidData, err)
-    }));
+    let y = try!(dailyv[0].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
+    let m = try!(dailyv[1].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
+    let d = try!(dailyv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
     let date = Local.ymd(y, m, d);
     Ok(date)
 }
 
 fn convert_markdown(md: &str) -> io::Result<String> {
-    let parser = Parser::new_ext(&md,Options::all());
+    let parser = Parser::new_ext(&md, Options::all());
     let mut html_buf = String::new();
     html::push_html(&mut html_buf, parser);
     Ok(html_buf)
@@ -166,7 +151,7 @@ fn build_daily(path: &Path) -> io::Result<Daily> {
         Err(e) => println!("Error: {}", e.to_string()),
     }
 
-    let md = content.splitn(3,"---").collect::<Vec<&str>>()[2];
+    let md = content.splitn(3, "---").collect::<Vec<&str>>()[2];
     match convert_markdown(&md) {
         Ok(md) => daily.content = md,
         Err(e) => println!("Error: {}", e.to_string()),
@@ -187,8 +172,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
     <link rel="stylesheet" href="layers.min.css" />
     <link rel="stylesheet" href="index.css"/>
     "##;
-    let markup =
-        html! {
+    let markup = html! {
         head {
             meta chaset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
@@ -204,7 +188,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                         }
                     }
                     div.clear {
-                        
+
                     }
                     @for (i,daily) in dailies.iter().enumerate() {
                         @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
@@ -243,10 +227,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
 
 fn build() -> io::Result<()> {
     let mut paths: Vec<PathBuf> = Vec::new();
-    for entry in glob::glob("diary/**/*.md").map_err(|err| {
-        Error::new(ErrorKind::InvalidData, err)
-    })?
-    {
+    for entry in glob::glob("diary/**/*.md").map_err(|err| Error::new(ErrorKind::InvalidData, err))? {
         match entry {
             Ok(path) => paths.push(path),
             Err(e) => println!("{}", e.to_string()),
@@ -276,18 +257,12 @@ fn prepear_dir() -> io::Result<()> {
 fn copy_css_image() -> io::Result<()> {
     fs::copy("src/css/index.css", "docs/index.css")?;
     fs::copy("src/css/layers.min.css", "docs/layers.min.css")?;
-    fs::copy(
-        "src/css/layers.section.min.css",
-        "docs/layers.section.min.css",
-    )?;
+    fs::copy("src/css/layers.section.min.css", "docs/layers.section.min.css")?;
     fs::copy("src/img/logo.png", "docs/logo.png")?;
     Ok(())
 }
 
-
-
 fn main() {
-
     match prepear_dir() {
         Ok(()) => println!(">>> Create docs directory"),
         Err(e) => println!("Error: {}", e.to_string()),
