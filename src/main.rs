@@ -30,9 +30,9 @@ impl Daily {
 <script>hljs.initHighlightingOnLoad();</script>"##;
         let csslist = [
             "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css",
-            "/static/layers.min.css",
-            "/static/layers.section.min.css",
-            "/static/index.css",
+            "/static/css/layers.min.css",
+            "/static/css/layers.section.min.css",
+            "/static/css/index.css",
             "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css",
         ];
         let disqus = r##"
@@ -170,9 +170,9 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
     dailies.sort_by(|a, b| b.day.cmp(&a.day));
     let css = r##"
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
-    <link rel="stylesheet" href="static/layers.section.min.css" />
-    <link rel="stylesheet" href="static/layers.min.css" />
-    <link rel="stylesheet" href="static/index.css"/>
+    <link rel="stylesheet" href="static/css/layers.section.min.css" />
+    <link rel="stylesheet" href="static/css/layers.min.css" />
+    <link rel="stylesheet" href="static/css/index.css"/>
     "##;
     let markup = html! {
         head {
@@ -253,14 +253,17 @@ fn prepear_dir() -> io::Result<()> {
     if Path::new("docs/").exists() == false {
         fs::create_dir("docs/")?;
     }
+    if Path::new("docs/static").exists() == false {
+        fs::create_dir("docs/static")?;
+    }
     Ok(())
 }
 
 fn copy_css_image() -> io::Result<()> {
-    let options = CopyOptions::new(); //Initialize default values for CopyOptions
+    let options = CopyOptions::new(); //Initialize default values for CopyOptions   
     for entry in fs::read_dir("static")? {
         let path = entry?.path();
-        match copy(path, "docs", &options) {
+        match copy(path, "docs/static", &options) {
             Ok(_d) => {}
             Err(e) => println!("Error: {}", e.to_string()),
         }
