@@ -1,6 +1,7 @@
 #![feature(proc_macro)]
 #![feature(proc_macro_non_items)]
 extern crate chrono;
+extern crate fs_extra;
 extern crate glob;
 extern crate maud;
 extern crate pulldown_cmark;
@@ -12,6 +13,7 @@ use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
 
 use chrono::{Date, Local, TimeZone};
+use fs_extra::dir::*;
 use maud::{html, PreEscaped};
 use pulldown_cmark::{html, Options, Parser};
 
@@ -28,9 +30,9 @@ impl Daily {
 <script>hljs.initHighlightingOnLoad();</script>"##;
         let csslist = [
             "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css",
-            "/layers.min.css",
-            "/layers.section.min.css",
-            "/index.css",
+            "/static/layers.min.css",
+            "/static/layers.section.min.css",
+            "/static/index.css",
             "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css",
         ];
         let disqus = r##"
@@ -168,9 +170,9 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
     dailies.sort_by(|a, b| b.day.cmp(&a.day));
     let css = r##"
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
-    <link rel="stylesheet" href="layers.section.min.css" />
-    <link rel="stylesheet" href="layers.min.css" />
-    <link rel="stylesheet" href="index.css"/>
+    <link rel="stylesheet" href="static/layers.section.min.css" />
+    <link rel="stylesheet" href="static/layers.min.css" />
+    <link rel="stylesheet" href="static/index.css"/>
     "##;
     let markup = html! {
         head {
@@ -255,10 +257,14 @@ fn prepear_dir() -> io::Result<()> {
 }
 
 fn copy_css_image() -> io::Result<()> {
-    fs::copy("src/css/index.css", "docs/index.css")?;
-    fs::copy("src/css/layers.min.css", "docs/layers.min.css")?;
-    fs::copy("src/css/layers.section.min.css", "docs/layers.section.min.css")?;
-    fs::copy("src/img/logo.png", "docs/logo.png")?;
+    let options = CopyOptions::new(); //Initialize default values for CopyOptions
+    for entry in fs::read_dir("static")? {
+        let path = entry?.path();
+        match copy(path, "docs", &options) {
+            Ok(_d) => {}
+            Err(e) => println!("Error: {}", e.to_string()),
+        }
+    }
     Ok(())
 }
 
