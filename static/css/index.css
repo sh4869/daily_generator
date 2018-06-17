@@ -1,8 +1,7 @@
-@import "https://fonts.googleapis.com/earlyaccess/sawarabigothic.css";
 @import 'https://fonts.googleapis.com/css?family=Caveat|Kelly+Slab';
 
 body {
-    font-family: "Sawarabi Gothic",sans-serif;
+    font-family: sans-serif;
     background: #fcffff;
     max-width: 900px;
     margin: 0 auto;
