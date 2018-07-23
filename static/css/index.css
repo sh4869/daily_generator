@@ -51,11 +51,11 @@ footer {
     color: #111;
 }
 
-.day h1 {
-    display: block;
+.day h2 {
     text-decoration: none;
     color: #111;
-    margin-top: 0.2em;
+    margin-top: 0.4em;
+    margin-bottom: 0.8em;
 }
 
 
@@ -92,7 +92,7 @@ time {
     font-family: 'Kelly Slab';
     display: inline-block;
     padding: 0.3em 0.3em;
-    font-size: 1.3em;
+    font-size: 1.1em;
     background: #dbeeff;
     border-radius: 3px;
     font-weight: 600;
