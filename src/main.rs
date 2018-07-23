@@ -260,7 +260,8 @@ fn prepear_dir() -> io::Result<()> {
 }
 
 fn copy_css_image() -> io::Result<()> {
-    let options = CopyOptions::new(); //Initialize default values for CopyOptions   
+    let mut options = CopyOptions::new(); //Initialize default values for CopyOptions
+    options.overwrite = true;
     for entry in fs::read_dir("static")? {
         let path = entry?.path();
         match copy(path, "docs/static", &options) {
