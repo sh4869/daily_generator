@@ -1,5 +1,6 @@
-#![feature(proc_macro)]
 #![feature(proc_macro_non_items)]
+#![feature(use_extern_macros)]
+
 extern crate chrono;
 extern crate fs_extra;
 extern crate glob;
@@ -10,7 +11,7 @@ use std::fs::{self, File};
 use std::io;
 use std::io::prelude::*;
 use std::io::{Error, ErrorKind};
-use std::path::{Path, PathBuf,MAIN_SEPARATOR};
+use std::path::{Path, PathBuf, MAIN_SEPARATOR};
 
 use chrono::{Date, Local, TimeZone};
 use fs_extra::dir::*;
@@ -58,34 +59,34 @@ s.setAttribute('data-timestamp', +new Date());
                         link rel="stylesheet" href=(url);
                     }
                     (PreEscaped(higlightjs))
-                    title (title)
+                    title {(title)}
                 }
                 body{
                     div.row {
                         div.row-content.buffer {
                             div.column.twelve.top#header {
                                 a href=("/") {
-                                    h1.title "Daily Bread"
+                                    h1.title {"Daily Bread"}
                                 }
                             }
                             div.clear {
 
                             }
                             div.info {
-                                time (self.day.format("%Y/%m/%d"));
-                                h1 (self.title);
+                                time {(self.day.format("%Y/%m/%d"))};
+                                h1 {(self.title)};
                             }
                             div.daily {
                                 (PreEscaped(&self.content))
                                 div.signature {
-                                    p ("Written by sh4869");
+                                    p {("Written by sh4869")};
                                 }
                                 (PreEscaped(disqus))
                             }
                             footer {
                                 hr;
-                                a href=("/") "Daily Bread"
-                                p (PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )
+                                a href=("/") {"Daily Bread"}
+                                p {(PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )}
                             }
                         }
                     }
@@ -179,14 +180,14 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
             meta chaset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
             (PreEscaped(css))
-            title "Daily Bread"
+            title {"Daily Bread"}
         }
         body {
             div.row {
                 div.row-content.buffer {
                     div.column.twelve.top#header {
                         a href=("/") {
-                            h1.title "Daily Bread"
+                            h1.title {"Daily Bread"}
                         }
                     }
                     div.clear {
@@ -197,26 +198,26 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                         @if i % 2 == 0 {
                             div.column.small-full.medium-half.large-half {
                                 div.day {
-                                    time (daily.day.format("%Y/%m/%d"));
+                                    time {(daily.day.format("%Y/%m/%d"))};
                                     a href=(link) {
-                                        h2 (daily.title)
+                                        h2 {(daily.title)}
                                     }
                                 }
                             }
                         } @else {
                             div.column.small-full.medium-half.medium-last {
                                 div.day {
-                                    time (daily.day.format("%Y/%m/%d"));
+                                    time {(daily.day.format("%Y/%m/%d"))};
                                     a href=(link) {
-                                        h2 (daily.title)
+                                        h2 {(daily.title)}
                                     }
                                 }
                             }
                         }
                     }
                     footer {
-                        a href=("/") "Daily Bread"
-                        p (PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )
+                        a href=("/") {"Daily Bread"}
+                        p {(PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )}
                     }
                 }
             }
