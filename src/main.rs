@@ -169,6 +169,7 @@ fn build_daily(path: &Path) -> io::Result<Daily> {
 
 fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
     dailies.sort_by(|a, b| b.day.cmp(&a.day));
+    dailies.retain(|daily| daily.title != "SKIP");
     let css = r##"
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
     <link rel="stylesheet" href="static/css/layers.section.min.css" />
