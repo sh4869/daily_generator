@@ -5,7 +5,7 @@ authors = ["sh4869 <nobuk4869@gmail.com>"]
 
 [dependencies]
 pulldown-cmark = "0.1.2"
-maud = "0.18.1"
+maud = "0.19.0"
 chrono = "0.4"
 glob = "0.2.11"
 fs_extra = "1.1.0"

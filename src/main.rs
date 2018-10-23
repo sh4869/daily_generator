@@ -1,5 +1,4 @@
-#![feature(proc_macro_non_items)]
-#![feature(use_extern_macros)]
+#![feature(proc_macro_hygiene)]
 
 extern crate chrono;
 extern crate fs_extra;
@@ -140,30 +139,39 @@ fn build_daily(path: &Path) -> io::Result<Daily> {
             return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
         }
     }
-    let mut daily = Daily {
-        content: "".into(),
-        title: "".into(),
+    let mut file_content = String::new();
+    file.read_to_string(&mut file_content)?;
+    // タイトルの取得
+    let title;
+    match get_title(&mut file_content) {
+        Ok(s) => title = s,
+        Err(e) => {
+            println!("Error: {}", e.to_string());
+            return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
+        }
+    };
+    // 中身の取得 & Markdownの変換
+    let md = file_content.splitn(3, "---").collect::<Vec<&str>>()[2];
+    let content;
+    match convert_markdown(&md) {
+        Ok(md) => content = md,
+        Err(e) => {
+            println!("Error: {}", e.to_string());
+            return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
+        }
+    };
+
+    let daily = Daily {
+        content: content,
+        title: title,
         day: date,
     };
 
-    let mut content = String::new();
-    file.read_to_string(&mut content)?;
-    // タイトルの取得
-    match get_title(&mut content) {
-        Ok(s) => daily.title = s,
-        Err(e) => println!("Error: {}", e.to_string()),
-    }
-
-    let md = content.splitn(3, "---").collect::<Vec<&str>>()[2];
-    match convert_markdown(&md) {
-        Ok(md) => daily.content = md,
-        Err(e) => println!("Error: {}", e.to_string()),
-    }
     match write_day_file(&daily) {
         Ok(()) => {}
         Err(e) => println!("Error: {}", e.to_string()),
     }
-    println!(">>>>> Build {}", daily.day.format("%Y/%m/%d"));
+    print!(">>>>> Build {}\r", daily.day.format("%Y/%m/%d"));
     Ok(daily)
 }
 
@@ -245,7 +253,7 @@ fn build() -> io::Result<()> {
         }
     }
     match build_top_page(&mut v) {
-        Ok(()) => println!(">>> Build toppage"),
+        Ok(()) => println!("\n>>> Build toppage"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     Ok(())
