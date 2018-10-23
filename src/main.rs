@@ -24,7 +24,7 @@ struct Daily {
 }
 
 impl Daily {
-    fn generate_html(&self) -> String {
+    fn generate_html(&self, before: Option<&Daily>, after: Option<&Daily>) -> String {
         let higlightjs = r##"
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>"##;
@@ -84,8 +84,40 @@ s.setAttribute('data-timestamp', +new Date());
                             }
                             footer {
                                 hr;
-                                a href=("/") {"Daily Bread"}
-                                p {(PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )}
+                                div.row {
+                                    div.clear {
+
+                                    }
+                                    div.row-content {
+
+                                    div.column.small-full.medium-half.large-half  {
+                                        @if after.is_some() {
+                                            @let link = "/".to_string() + &(after.unwrap().day.format("%Y/%m/%d").to_string()) + ".html";
+                                            time {(after.unwrap().day.format("%Y/%m/%d"))}
+                                            div.day {
+                                                a href=(link) {
+                                                    p {(&after.unwrap().title)}
+                                                }
+                                            }
+                                        }
+                                    }
+                                    div.column.small-full.medium-half.medium-last {
+                                        @if before.is_some() {
+                                            @let link = "/".to_string() + &(before.unwrap().day.format("%Y/%m/%d").to_string()) + ".html";
+                                            time {(before.unwrap().day.format("%Y/%m/%d"))}
+                                            div.day {
+                                                a href=(link) {
+                                                    p {(&before.unwrap().title)}
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    }
+                                }
+                                hr;
+                                p {(PreEscaped("&copy; 2017-2018 <a href=\"http://sh4869.net\">sh4869</a>") )}
+
                             }
                         }
                     }
@@ -118,18 +150,18 @@ fn convert_markdown(md: &str) -> io::Result<String> {
     Ok(html_buf)
 }
 
-fn write_day_file(daily: &Daily) -> io::Result<()> {
+fn write_day_file(daily: &Daily, before: Option<&Daily>, after: Option<&Daily>) -> io::Result<()> {
     let destpath = "docs/".to_string() + &daily.day.format("%Y/%m/%d").to_string() + &".html";
     let parent = Path::new(&destpath).parent().unwrap();
     if parent.exists() == false {
         fs::create_dir_all(parent.to_str().unwrap())?;
     }
     let mut file = File::create(&destpath)?;
-    file.write_all(daily.generate_html().as_bytes())?;
+    file.write_all(daily.generate_html(before, after).as_bytes())?;
     Ok(())
 }
 
-fn build_daily(path: &Path) -> io::Result<Daily> {
+fn parse_daily(path: &Path) -> io::Result<Daily> {
     let mut file = File::open(path)?;
     let date;
     match get_date(&path.to_str().unwrap().into()) {
@@ -160,19 +192,25 @@ fn build_daily(path: &Path) -> io::Result<Daily> {
             return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
         }
     };
-
     let daily = Daily {
         content: content,
         title: title,
         day: date,
     };
-
-    match write_day_file(&daily) {
-        Ok(()) => {}
-        Err(e) => println!("Error: {}", e.to_string()),
-    }
-    print!(">>>>> Build {}\r", daily.day.format("%Y/%m/%d"));
+    print!(">>>>> Parse {}\r", daily.day.format("%Y/%m/%d"));
     Ok(daily)
+}
+
+fn build_daily(dailies: &mut Vec<Daily>) -> io::Result<()> {
+    for i in 0..dailies.len() {
+        let back = if i == 0 { None } else { dailies.get(i - 1) };
+        let after = dailies.get(i + 1);
+        match write_day_file(&dailies[i], back, after) {
+            Ok(()) => print!(">>>>> Parse {}\r", dailies[i].day.format("%Y/%m/%d")),
+            Err(e) => println!("Error: {}", e.to_string()),
+        }
+    }
+    Ok(())
 }
 
 fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
@@ -247,13 +285,17 @@ fn build() -> io::Result<()> {
     }
     let mut v: Vec<Daily> = Vec::new();
     for path in paths {
-        match build_daily(path.as_path()) {
+        match parse_daily(path.as_path()) {
             Ok(daily) => v.push(daily),
             Err(e) => println!("{}", e),
         }
     }
+    match build_daily(&mut v) {
+        Ok(()) => println!("\nBuilded!"),
+        Err(e) => println!("Error: {}", e.to_string()),
+    }
     match build_top_page(&mut v) {
-        Ok(()) => println!("\n>>> Build toppage"),
+        Ok(()) => println!(">>> Build toppage"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     Ok(())
