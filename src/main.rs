@@ -25,9 +25,7 @@ struct Daily {
 
 impl Daily {
     fn generate_html(&self, before: Option<&Daily>, after: Option<&Daily>) -> String {
-        let higlightjs = r##"
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>"##;
+        let higlightjs = r##"<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();</script>"##;
         let csslist = [
             "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css",
             "/static/css/layers.min.css",
@@ -35,19 +33,8 @@ impl Daily {
             "/static/css/index.css",
             "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css",
         ];
-        let disqus = r##"
-<div id="disqus_thread"></div>
-<script>
-
-(function() { // DON'T EDIT BELOW THIS LINE
-var d = document, s = d.createElement('script');
-s.src = 'https://diary-sh4869-net.disqus.com/embed.js';
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                            "##;
+        let disqus = r##"<div id="disqus_thread"></div>
+<script>(function() {var d = document, s = d.createElement('script');s.src = 'https://diary-sh4869-net.disqus.com/embed.js';s.setAttribute('data-timestamp', +new Date());(d.head || d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>"##;
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
         let markup = html! {
             html {
@@ -216,17 +203,19 @@ fn build_daily(dailies: &mut Vec<Daily>) -> io::Result<()> {
 fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
     dailies.sort_by(|a, b| b.day.cmp(&a.day));
     dailies.retain(|daily| daily.title != "SKIP");
-    let css = r##"
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" />
-    <link rel="stylesheet" href="static/css/layers.section.min.css" />
-    <link rel="stylesheet" href="static/css/layers.min.css" />
-    <link rel="stylesheet" href="static/css/index.css"/>
-    "##;
+    let csslist = [
+        "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css",
+        "/static/css/layers.min.css",
+        "/static/css/layers.section.min.css",
+        "/static/css/index.css",
+    ];
     let markup = html! {
         head {
             meta chaset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
-            (PreEscaped(css))
+            @for url in &csslist {
+                link rel="stylesheet" href=(url);
+            }
             title {"Daily Bread"}
         }
         body {
@@ -334,7 +323,7 @@ fn main() {
         Err(e) => println!("Error: {}", e.to_string()),
     }
     match build() {
-        Ok(()) => println!(">>> All Dailies build ended."),
+        Ok(()) => println!(">>> All Dailies built"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
 }
