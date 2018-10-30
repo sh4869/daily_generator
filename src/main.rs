@@ -32,9 +32,8 @@ impl Daily {
             "/static/css/layers.section.min.css",
             "/static/css/index.css",
             "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css",
+            "https://fonts.googleapis.com/earlyaccess/mplus1p.css",
         ];
-        let disqus = r##"<div id="disqus_thread"></div>
-<script>(function() {var d = document, s = d.createElement('script');s.src = 'https://diary-sh4869-net.disqus.com/embed.js';s.setAttribute('data-timestamp', +new Date());(d.head || d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>"##;
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
         let markup = html! {
             html {
@@ -64,45 +63,37 @@ impl Daily {
                             }
                             div.daily {
                                 (PreEscaped(&self.content))
-                                div.signature {
-                                    p {("Written by sh4869")};
-                                }
-                                (PreEscaped(disqus))
                             }
                             footer {
                                 hr;
                                 div.row {
                                     div.clear {
-
                                     }
                                     div.row-content {
-
-                                    div.column.small-full.medium-half.large-half  {
-                                        @if after.is_some() {
-                                            @let link = "/".to_string() + &(after.unwrap().day.format("%Y/%m/%d").to_string()) + ".html";
-                                            time {(after.unwrap().day.format("%Y/%m/%d"))}
-                                            div.day {
-                                                a href=(link) {
-                                                    p {(&after.unwrap().title)}
+                                        div.column.small-full.medium-half.large-half  {
+                                            @if after.is_some() {
+                                                @let link = "/".to_string() + &(after.unwrap().day.format("%Y/%m/%d").to_string()) + ".html";
+                                                time {(after.unwrap().day.format("%Y/%m/%d"))}
+                                                div.day {
+                                                    a href=(link) {
+                                                        p {(&after.unwrap().title)}
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                    div.column.small-full.medium-half.medium-last {
-                                        @if before.is_some() {
-                                            @let link = "/".to_string() + &(before.unwrap().day.format("%Y/%m/%d").to_string()) + ".html";
-                                            time {(before.unwrap().day.format("%Y/%m/%d"))}
-                                            div.day {
-                                                a href=(link) {
-                                                    p {(&before.unwrap().title)}
+                                        div.column.small-full.medium-half.medium-last {
+                                            @if before.is_some() {
+                                                @let link = "/".to_string() + &(before.unwrap().day.format("%Y/%m/%d").to_string()) + ".html";
+                                                time {(before.unwrap().day.format("%Y/%m/%d"))}
+                                                div.day {
+                                                    a href=(link) {
+                                                        p {(&before.unwrap().title)}
+                                                    }
                                                 }
                                             }
                                         }
-
-                                    }
                                     }
                                 }
-                                hr;
                                 p {(PreEscaped("&copy; 2017-2018 <a href=\"http://sh4869.net\">sh4869</a>") )}
 
                             }
@@ -208,6 +199,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
         "/static/css/layers.min.css",
         "/static/css/layers.section.min.css",
         "/static/css/index.css",
+        "https://fonts.googleapis.com/earlyaccess/mplus1p.css",
     ];
     let markup = html! {
         head {
@@ -235,8 +227,10 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                             div.column.small-full.medium-half.large-half {
                                 div.day {
                                     time {(daily.day.format("%Y/%m/%d"))};
-                                    a href=(link) {
-                                        h2 {(daily.title)}
+                                    div {
+                                        a href=(link) {
+                                            h2 {(daily.title)}
+                                        }
                                     }
                                 }
                             }
@@ -244,8 +238,10 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                             div.column.small-full.medium-half.medium-last {
                                 div.day {
                                     time {(daily.day.format("%Y/%m/%d"))};
-                                    a href=(link) {
-                                        h2 {(daily.title)}
+                                    div {
+                                        a href=(link) {
+                                            h2 {(daily.title)}
+                                        }
                                     }
                                 }
                             }
