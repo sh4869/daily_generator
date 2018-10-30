@@ -53,6 +53,7 @@ impl Daily {
                                 a href=("/") {
                                     h1.title {"Daily Bread"}
                                 }
+                                p { "It's alright , I remember sometimes the time we chose what to bring on the journey" }
                             }
                             div.clear {
 
@@ -217,6 +218,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                         a href=("/") {
                             h1.title {"Daily Bread"}
                         }
+                        p { "It's alright , I remember sometimes the time we chose what to bring on the journey" }
                     }
                     div.clear {
 
