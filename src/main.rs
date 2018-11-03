@@ -14,7 +14,7 @@ use std::path::{Path, PathBuf, MAIN_SEPARATOR};
 
 use chrono::{Date, Local, TimeZone};
 use fs_extra::dir::*;
-use maud::{html, PreEscaped};
+use maud::{html, PreEscaped, DOCTYPE};
 use pulldown_cmark::{html, Options, Parser};
 
 struct Daily {
@@ -36,7 +36,8 @@ impl Daily {
         ];
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
         let markup = html! {
-            html {
+            (DOCTYPE)
+            html lang="ja" {
                 head {
                     meta chaset="utf-8";
                     meta name="viewport" content="width=device-width, initial-scale=1";
@@ -203,55 +204,58 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
         "https://fonts.googleapis.com/earlyaccess/mplus1p.css",
     ];
     let markup = html! {
-        head {
-            meta chaset="utf-8";
-            meta name="viewport" content="width=device-width, initial-scale=1";
-            @for url in &csslist {
-                link rel="stylesheet" href=(url);
+        (DOCTYPE)
+        html lang="ja" {
+            head {
+                meta chaset="utf-8";
+                meta name="viewport" content="width=device-width, initial-scale=1";
+                @for url in &csslist {
+                    link rel="stylesheet" href=(url);
+                }
+                title {"Daily Bread"}
             }
-            title {"Daily Bread"}
-        }
-        body {
-            div.row {
-                div.row-content.buffer {
-                    div.column.twelve.top#header {
-                        a href=("/") {
-                            h1.title {"Daily Bread"}
+            body {
+                div.row {
+                    div.row-content.buffer {
+                        div.column.twelve.top#header {
+                            a href=("/") {
+                                h1.title {"Daily Bread"}
+                            }
+                            p { "It's alright , I remember sometimes the time we chose what to bring on the journey" }
                         }
-                        p { "It's alright , I remember sometimes the time we chose what to bring on the journey" }
-                    }
-                    div.clear {
+                        div.clear {
 
-                    }
-                    @for (i,daily) in dailies.iter().enumerate() {
-                        @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
-                        @if i % 2 == 0 {
-                            div.column.small-full.medium-half.large-half {
-                                div.day {
-                                    time {(daily.day.format("%Y/%m/%d"))};
-                                    div {
-                                        a href=(link) {
-                                            h2 {(daily.title)}
+                        }
+                        @for (i,daily) in dailies.iter().enumerate() {
+                            @let link = daily.day.format("%Y/%m/%d").to_string() + ".html";
+                            @if i % 2 == 0 {
+                                div.column.small-full.medium-half.large-half {
+                                    div.day {
+                                        time {(daily.day.format("%Y/%m/%d"))};
+                                        div {
+                                            a href=(link) {
+                                                h2 {(daily.title)}
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        } @else {
-                            div.column.small-full.medium-half.medium-last {
-                                div.day {
-                                    time {(daily.day.format("%Y/%m/%d"))};
-                                    div {
-                                        a href=(link) {
-                                            h2 {(daily.title)}
+                            } @else {
+                                div.column.small-full.medium-half.medium-last {
+                                    div.day {
+                                        time {(daily.day.format("%Y/%m/%d"))};
+                                        div {
+                                            a href=(link) {
+                                                h2 {(daily.title)}
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    footer {
-                        a href=("/") {"Daily Bread"}
-                        p {(PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )}
+                        footer {
+                            a href=("/") {"Daily Bread"}
+                            p {(PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )}
+                        }
                     }
                 }
             }
