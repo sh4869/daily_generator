@@ -114,11 +114,11 @@ fn get_title(md: &String) -> io::Result<String> {
 }
 
 fn get_date(filepath: &String) -> io::Result<Date<Local>> {
-    let dailystr = filepath.clone().replace(".md", "").replace("diary/", "");
+    let dailystr = filepath.clone().replace(".md", "");
     let dailyv: Vec<&str> = dailystr.split(MAIN_SEPARATOR).collect();
-    let y = try!(dailyv[0].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
-    let m = try!(dailyv[1].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
-    let d = try!(dailyv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
+    let y = try!(dailyv[1].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
+    let m = try!(dailyv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
+    let d = try!(dailyv[3].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)));
     let date = Local.ymd(y, m, d);
     Ok(date)
 }
