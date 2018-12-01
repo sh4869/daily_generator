@@ -110,6 +110,9 @@ impl Daily {
 
 fn get_title(md: &String) -> io::Result<String> {
     let v: Vec<&str> = md.split("---").collect();
+    if v.len() < 2 {
+        return Err(Error::new(ErrorKind::InvalidData, "title not found"));
+    }
     Ok((v[1].split("title:").collect::<Vec<&str>>())[1].trim().into())
 }
 
@@ -158,7 +161,6 @@ fn parse_daily(path: &Path) -> io::Result<Daily> {
     match get_title(&mut file_content) {
         Ok(s) => title = s,
         Err(e) => {
-            println!("Error: {}", e.to_string());
             return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
         }
     };
@@ -278,7 +280,7 @@ fn build() -> io::Result<()> {
     for path in paths {
         match parse_daily(path.as_path()) {
             Ok(daily) => v.push(daily),
-            Err(e) => println!("{}", e),
+            Err(e) => println!("\r\n{}", e),
         }
     }
     match build_daily(&mut v) {
