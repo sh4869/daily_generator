@@ -1,9 +1,13 @@
 dist: trusty
 language: rust
 rust:
-  - nightly
+- nightly
 before_install:
-  - nvm install node
-  - nvm use node
-  - npm install -g firebase-tools
-after_success: export RUST_BACKTRACE=1 && cargo run && firebase --token $FIREBASE_TOKEN --project sh4869-diary deploy
+- nvm install node
+- nvm use node
+- npm install -g firebase-tools
+after_success: export RUST_BACKTRACE=1 && cargo run && firebase --token $FIREBASE_TOKEN
+  --project sh4869-diary deploy
+notifications:
+  slack:
+    secure: fR0Jkp1fvj55kUM0G/8EdlzIyQVkn105wCH9pltaasw+D9a0NPYqHFjnQJHoTKuPKOcCRwvSLSym25PtZD+whbAEcUWII9UdXeIVkLC4ALYRbZP0a9xdVI9j7TlmRiwHl+lv4GyyP5SBIRm08CMRf+dbPWT6dKA6MGg3Lh8rlqPGdkluQ61hb3K0U8rmLXgMFTdZulUp1CaSzZT1heXWWX5I4QwwgdokIx9f2J4EWKY5HNLC9DbxAyggdKJS/Hqlg5haLkPJLzW5tJnjwPKP9UEOgb3O/L7vyIWXz/OxAB5KCzXuvU2XcrrSJT2Jh3j5OIUOCq/vhOz5w9seqG4WeF2O0ZlKnflmdrVXxEaUZvGk1uUXsOeZLe1oswakN9FOHW+/pEJxuMSQGAFKc3ixh7h5GRyx2kiYA4VB2pdcb08WarfzLb/9UHXeuaoKvnu5s+Wt7v2LxkZ3eX9lcUJd8z3TUG/RFzwTAreTWUNp5aEm+uuioXcL6/MT7C0vGjEsps6jt8X5KOAZewPRGSJOv9oVh78pFo4a45wL6jyGicQ7Clpc5xM8t2aED10vZ5HGKts7wOPS/df/CE8J7Htlzy85izjMWvjKt1fkPyZuAUuM1JN8yXy5kuuuEVgWf5Hn7zEOtP7atuY80GgNfpDpuXLWU52o2cJ6QE+bBEGgCXo=
