@@ -1,6 +1,7 @@
 #![feature(proc_macro_hygiene)]
 
 extern crate chrono;
+extern crate clap;
 extern crate fs_extra;
 extern crate glob;
 extern crate maud;
@@ -13,6 +14,7 @@ use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf, MAIN_SEPARATOR};
 
 use chrono::{Date, Local, TimeZone};
+use clap::{App, Arg, SubCommand};
 use fs_extra::dir::*;
 use maud::{html, PreEscaped, DOCTYPE};
 use pulldown_cmark::{html, Options, Parser};
@@ -317,17 +319,71 @@ fn copy_css_image() -> io::Result<()> {
     Ok(())
 }
 
+fn create_diary_template(date: Date<Local>) -> io::Result<bool> {
+    let path = "diary/".to_string() + &date.format("%Y/%m/%d").to_string() + &".md";;
+    if !Path::new(&path).exists() {
+        let parent = Path::new(&path).parent().unwrap();
+        if parent.exists() == false {
+            fs::create_dir_all(parent.to_str().unwrap())?;
+        }
+        let mut file = File::create(&path)?;
+        file.write_all("---\ntitle:\n---\n".as_bytes())?;
+        Ok(true)
+    } else {
+        Ok(false)
+    }
+}
+
+fn create_templates(since: Date<Local>) -> io::Result<()> {
+    let mut date = since;
+    while date != Local::today() {
+        date = date + chrono::Duration::days(1);
+        match create_diary_template(date) {
+            Ok(true) => println!(">>> Create Template on {}", date.format("%Y/%m/%d")),
+            Ok(false) => {},
+            Err(e) => println!("Error: {}", e.to_string()),
+        }
+    }
+    Ok(())
+}
+
 fn main() {
-    match prepear_dir() {
-        Ok(()) => println!(">>> Create docs directory"),
-        Err(e) => println!("Error: {}", e.to_string()),
-    }
-    match copy_css_image() {
-        Ok(()) => println!(">>> Copied css files."),
-        Err(e) => println!("Error: {}", e.to_string()),
-    }
-    match build() {
-        Ok(()) => println!(">>> All Dailies built"),
-        Err(e) => println!("Error: {}", e.to_string()),
+    let matches = App::new("Daily Generator")
+        .version("0.1")
+        .author("sh4869 <nobuk4869@gmail.com>")
+        .about("generate daily program")
+        .subcommand(
+            SubCommand::with_name("new")
+                .about("generate new file")
+                .arg(Arg::with_name("all").short("a").help("generate all diary not created")),
+        )
+        .get_matches();
+    
+    if let Some(matches_new) = matches.subcommand_matches("new") {
+        if matches_new.is_present("all") {
+            match create_templates(Local::today() - chrono::Duration::days(15)) {
+                Ok(()) => println!(">>> Created templates"),
+                Err(e) => println!("Error: {}", e.to_string()),
+            }
+        } else {
+            match create_diary_template(Local::today().pred()) {
+                Ok(true) => println!(">>> Create date file."),
+                Ok(false) => {},
+                Err(e) => println!("Error: {}", e.to_string()),
+            }
+        }
+    } else {
+        match prepear_dir() {
+            Ok(()) => println!(">>> Create docs directory"),
+            Err(e) => println!("Error: {}", e.to_string()),
+        }
+        match copy_css_image() {
+            Ok(()) => println!(">>> Copied css files."),
+            Err(e) => println!("Error: {}", e.to_string()),
+        }
+        match build() {
+            Ok(()) => println!(">>> All Dailies built"),
+            Err(e) => println!("Error: {}", e.to_string()),
+        }
     }
 }
