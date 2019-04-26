@@ -69,7 +69,7 @@ impl Daily {
                                 (PreEscaped(&self.content))
                             }
                             footer {
-                                hr;
+                                hr.footer;
                                 div.row {
                                     div.clear {
                                     }
