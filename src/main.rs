@@ -34,7 +34,7 @@ impl Daily {
             "/static/css/layers.section.min.css",
             "/static/css/index.css",
             "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css",
-            "https://fonts.googleapis.com/earlyaccess/mplus1p.css",
+            "https://fonts.googleapis.com/css?family=Noto+Sans+JP",
         ];
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
         let markup = html! {
@@ -69,7 +69,7 @@ impl Daily {
                                 (PreEscaped(&self.content))
                             }
                             footer {
-                                hr;
+                                hr.footer;
                                 div.row {
                                     div.clear {
                                     }
@@ -205,7 +205,7 @@ fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
         "/static/css/layers.min.css",
         "/static/css/layers.section.min.css",
         "/static/css/index.css",
-        "https://fonts.googleapis.com/earlyaccess/mplus1p.css",
+        "https://fonts.googleapis.com/css?family=Noto+Sans+JP",
     ];
     let markup = html! {
         (DOCTYPE)
