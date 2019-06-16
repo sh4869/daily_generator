@@ -16,11 +16,14 @@ use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
 
 pub fn prepear_dir() -> io::Result<()> {
-    if Path::new("docs/").exists() == false {
+    if !Path::new("docs/").exists() {
         fs::create_dir("docs/")?;
     }
-    if Path::new("docs/static").exists() == false {
+    if !Path::new("docs/static").exists() {
         fs::create_dir("docs/static")?;
+    }
+    if !Path::new("docs/pages").exists() {
+        fs::create_dir("docs/pages")?;
     }
     Ok(())
 }
