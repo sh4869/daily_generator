@@ -1,4 +1,4 @@
-use diary::common::Daily;
+use diary::common::{Daily,HEADER_WORD};
 use maud::{html, PreEscaped, DOCTYPE};
 use std::fs::File;
 use std::io;
@@ -37,7 +37,7 @@ pub fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                             a href=("/") {
                                 h1.title {"Daily Bread"}
                             }
-                            p { "It's alright , I remember sometimes the time we chose what to bring on the journey" }
+                            p {(HEADER_WORD)}
                         }
                     }
                     div.row {

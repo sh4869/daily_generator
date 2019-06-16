@@ -1,6 +1,8 @@
 use chrono::{Date, Local};
 use maud::{html, PreEscaped, DOCTYPE};
 
+pub static HEADER_WORD: &str = "You will understand if you come here, You'll overlook your sleepiness";
+
 pub struct Daily {
     pub day: Date<Local>,
     pub title: String,
@@ -36,7 +38,7 @@ impl Daily {
                             a href=("/") {
                                 h1.title {"Daily Bread"}
                             }
-                            p { "It's alright , I remember sometimes the time we chose what to bring on the journey" }
+                            p {(HEADER_WORD)}
                         }
                     }
                     div.row.navigation {
