@@ -3,8 +3,8 @@ use diary::common::Daily;
 use pulldown_cmark::{html, Options, Parser};
 use std::fs::File;
 use std::io;
-use std::io::{Error, ErrorKind};
 use std::io::prelude::*;
+use std::io::{Error, ErrorKind};
 use std::path::{Path, MAIN_SEPARATOR};
 
 fn get_title(md: &String) -> io::Result<String> {

@@ -1,21 +1,19 @@
 #![feature(proc_macro_hygiene)]
-extern crate maud;
 extern crate chrono;
-extern crate pulldown_cmark;
 extern crate fs_extra;
+extern crate maud;
+extern crate pulldown_cmark;
 
 pub mod diary;
 
+use self::diary::{diary_build::build_dailies, parser::parse_daily, top_page::build_top_page};
+use chrono::{Date, Local};
+use fs_extra::dir::*;
 use std::fs::{self, File};
 use std::io;
 use std::io::prelude::*;
 use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
-use self::diary::{diary_build::build_dailies, parser::parse_daily, top_page::build_top_page};
-use fs_extra::dir::*;
-use chrono::{Date, Local};
-
-
 
 pub fn prepear_dir() -> io::Result<()> {
     if Path::new("docs/").exists() == false {
@@ -42,13 +40,13 @@ pub fn copy_css_image() -> io::Result<()> {
 
 pub fn build() -> io::Result<()> {
     match prepear_dir() {
-            Ok(()) => println!(">>> Create docs directory"),
-            Err(e) => println!("Error: {}", e.to_string()),
-        }
-        match copy_css_image() {
-            Ok(()) => println!(">>> Copied css files."),
-            Err(e) => println!("Error: {}", e.to_string()),
-        }
+        Ok(()) => println!(">>> Create docs directory"),
+        Err(e) => println!("Error: {}", e.to_string()),
+    }
+    match copy_css_image() {
+        Ok(()) => println!(">>> Copied css files."),
+        Err(e) => println!("Error: {}", e.to_string()),
+    }
     let mut paths: Vec<PathBuf> = Vec::new();
     for entry in glob::glob("diary/**/*.md").map_err(|err| Error::new(ErrorKind::InvalidData, err))? {
         match entry {

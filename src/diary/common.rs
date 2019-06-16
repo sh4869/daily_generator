@@ -80,7 +80,7 @@ impl Daily {
                                         }
                                     }
                                 }
-                                p {(PreEscaped("&copy; 2017-2018 <a href=\"http://sh4869.net\">sh4869</a>") )}
+                                p {(PreEscaped("&copy; 2017-2019 <a href=\"http://sh4869.net\">sh4869</a>") )}
 
                             }
                         }

@@ -1,6 +1,6 @@
 use diary::common::Daily;
 use maud::{html, PreEscaped, DOCTYPE};
-use std::fs::{File};
+use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 
@@ -65,7 +65,7 @@ pub fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
                         }
                         footer {
                             a href=("/") {"Daily Bread"}
-                            p {(PreEscaped("&copy; 2017 <a href=\"http://sh4869.net\">sh4869</a>") )}
+                            p {(PreEscaped("&copy; 2017-2019 <a href=\"http://sh4869.net\">sh4869</a>") )}
                         }
                     }
                 }

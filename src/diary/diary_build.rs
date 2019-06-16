@@ -2,8 +2,7 @@ use diary::common::Daily;
 use std::fs::{self, File};
 use std::io;
 use std::io::prelude::*;
-use std::path::{Path};
-
+use std::path::Path;
 
 fn write_day_file(daily: &Daily, before: Option<&Daily>, after: Option<&Daily>) -> io::Result<()> {
     let destpath = "docs/".to_string() + &daily.day.format("%Y/%m/%d").to_string() + &".html";
