@@ -3,10 +3,12 @@ extern crate chrono;
 extern crate fs_extra;
 extern crate maud;
 extern crate pulldown_cmark;
+extern crate serde;
+extern crate serde_json;
 
 pub mod diary;
 
-use self::diary::{diary_builder::build_dailies, parser::parse_daily, top_page_builder::build_top_page};
+use self::diary::{diary_builder::build_dailies, index_builder::build_index_json, parser::parse_daily, top_page_builder::build_top_page};
 use chrono::{Date, Local};
 use fs_extra::dir::*;
 use std::fs::{self, File};
@@ -70,6 +72,10 @@ pub fn build() -> io::Result<()> {
     }
     match build_top_page(&mut v) {
         Ok(()) => println!(">>> Build toppage"),
+        Err(e) => println!("Error: {}", e.to_string()),
+    }
+    match build_index_json(&v) {
+        Ok(()) => println!(">>> Builld index.json"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     Ok(())
