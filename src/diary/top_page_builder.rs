@@ -1,4 +1,4 @@
-use diary::common::{Daily,HEADER_WORD};
+use diary::diary_page::{DiaryPage,HEADER_WORD};
 use maud::{html, PreEscaped, DOCTYPE};
 use std::fs::File;
 use std::io;
@@ -13,7 +13,7 @@ const CSSLIST: [&str; 4] = [
     "https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css",
 ];
 
-pub fn build_top_page(dailies: &mut Vec<Daily>) -> io::Result<()> {
+pub fn build_top_page(dailies: &mut Vec<DiaryPage>) -> io::Result<()> {
     dailies.sort_by(|a, b| b.day.cmp(&a.day));
     dailies.retain(|daily| daily.title != "SKIP");
     let page_size = (dailies.len() as i32) / PER_PAGE + 1;

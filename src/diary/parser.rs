@@ -1,5 +1,5 @@
 use chrono::{Date, Local, TimeZone};
-use diary::common::Daily;
+use diary::diary_page::DiaryPage;
 use pulldown_cmark::{html, Options, Parser};
 use std::fs::File;
 use std::io;
@@ -32,7 +32,7 @@ fn convert_markdown(md: &str) -> io::Result<String> {
     Ok(html_buf)
 }
 
-pub fn parse_daily(path: &Path) -> io::Result<Daily> {
+pub fn parse_daily(path: &Path) -> io::Result<DiaryPage> {
     let mut file = File::open(path)?;
     let date;
     match get_date(&path.to_str().unwrap().into()) {
@@ -62,7 +62,7 @@ pub fn parse_daily(path: &Path) -> io::Result<Daily> {
             return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
         }
     };
-    let daily = Daily {
+    let daily = DiaryPage {
         content: content,
         title: title,
         day: date,

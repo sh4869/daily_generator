@@ -1,10 +1,10 @@
-use diary::common::Daily;
+use diary::diary_page::DiaryPage;
 use std::fs::{self, File};
 use std::io;
 use std::io::prelude::*;
 use std::path::Path;
 
-fn write_day_file(daily: &Daily, before: Option<&Daily>, after: Option<&Daily>) -> io::Result<()> {
+fn write_day_file(daily: &DiaryPage, before: Option<&DiaryPage>, after: Option<&DiaryPage>) -> io::Result<()> {
     let destpath = "docs/".to_string() + &daily.day.format("%Y/%m/%d").to_string() + &".html";
     let parent = Path::new(&destpath).parent().unwrap();
     if parent.exists() == false {
@@ -15,7 +15,7 @@ fn write_day_file(daily: &Daily, before: Option<&Daily>, after: Option<&Daily>) 
     Ok(())
 }
 
-pub fn build_dailies(dailies: &mut Vec<Daily>) -> io::Result<()> {
+pub fn build_dailies(dailies: &mut Vec<DiaryPage>) -> io::Result<()> {
     for i in 0..dailies.len() {
         let back = if i == 0 { None } else { dailies.get(i - 1) };
         let after = dailies.get(i + 1);

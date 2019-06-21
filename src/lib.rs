@@ -6,7 +6,7 @@ extern crate pulldown_cmark;
 
 pub mod diary;
 
-use self::diary::{diary_build::build_dailies, parser::parse_daily, top_page::build_top_page};
+use self::diary::{diary_builder::build_dailies, parser::parse_daily, top_page_builder::build_top_page};
 use chrono::{Date, Local};
 use fs_extra::dir::*;
 use std::fs::{self, File};

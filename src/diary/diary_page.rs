@@ -3,14 +3,14 @@ use maud::{html, PreEscaped, DOCTYPE};
 
 pub static HEADER_WORD: &str = "You will understand if you come here, You'll overlook your sleepiness";
 
-pub struct Daily {
+pub struct DiaryPage {
     pub day: Date<Local>,
     pub title: String,
     pub content: String,
 }
 
-impl Daily {
-    pub fn generate_html(&self, before: Option<&Daily>, after: Option<&Daily>) -> String {
+impl DiaryPage {
+    pub fn generate_html(&self, before: Option<&DiaryPage>, after: Option<&DiaryPage>) -> String {
         let higlightjs = r##"<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();</script>"##;
         let csslist = [
             "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css",
