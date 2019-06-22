@@ -1,7 +1,7 @@
 @import "https://fonts.googleapis.com/css?family=Caveat|Kelly+Slab";
 
 body {
-  font-family: "Noto Sans JP",sans-serif;
+  font-family: "Noto Sans JP", sans-serif;
   background: #ffffff;
   max-width: 1000px;
   margin: 0 auto;
@@ -85,7 +85,7 @@ code {
 
 #header h1.title {
   margin-top: 1rem;
-  margin-bottom: 1.0rem;
+  margin-bottom: 1rem;
   color: black;
   font-size: 5rem;
   font-family: "Caveat", cursive;
@@ -129,7 +129,7 @@ code {
 .day_colum a {
   text-decoration: none;
   color: #111;
-  display:inline-block;
+  display: inline-block;
 }
 
 .day_colum h2 {
@@ -153,19 +153,17 @@ code {
 
 .paging p.current {
   color: black;
-  font-weight: bold
+  font-weight: bold;
 }
 
 .paging a {
   text-decoration: none;
-  color: #777;  
+  color: #777;
 }
 
 .paging a:hover {
   text-decoration: underline;
 }
-
-
 
 /* 個別ページ */
 
@@ -175,7 +173,11 @@ code {
   text-align: center;
 }
 
-.navigation .day a{
+.navigation .day {
+  margin: 0.5em;
+}
+
+.navigation .day a {
   text-decoration: none;
   color: #111;
 }
@@ -195,7 +197,6 @@ code {
   margin-top: 0.5rem;
   margin-bottom: 2rem;
 }
-
 
 /** 本文 **/
 
@@ -220,4 +221,9 @@ code {
   border-width: 1px;
   border-style: ridge;
   width: 80%;
+}
+
+.daily {
+  margin-right: 1em;
+  margin-left: 1em;
 }

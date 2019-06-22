@@ -18,7 +18,7 @@ impl DiaryPage {
         let markup = page(&title, 
             html! { 
                 div.row.navigation {
-                    div class=("col-xs-12 col-md-6")  {
+                    div class=("col-xs-6")  {
                         @if after.is_some() {
                             @let link = "/".to_string() + &(after.unwrap().day.format("%Y/%m/%d").to_string()) + ".html";
                             time.small {(after.unwrap().day.format("%Y/%m/%d"))}
@@ -29,7 +29,7 @@ impl DiaryPage {
                             }
                         }
                     }
-                    div class=("col-xs-12 col-md-6") {
+                    div class=("col-xs-6") {
                         @if before.is_some() {
                             @let link = "/".to_string() + &(before.unwrap().day.format("%Y/%m/%d").to_string()) + ".html";
                             time.small {(before.unwrap().day.format("%Y/%m/%d"))}
