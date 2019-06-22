@@ -4,6 +4,7 @@ body {
   font-family: "Noto Sans JP", sans-serif;
   background: #ffffff;
   max-width: 1000px;
+  width: 95%;
   margin: 0 auto;
 }
 
@@ -76,7 +77,7 @@ code {
 #header {
   text-align: center;
   margin-top: 8rem;
-  margin-bottom: 8rem;
+  margin-bottom: 5rem;
 }
 
 #header a {
