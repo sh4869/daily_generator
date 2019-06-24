@@ -20,7 +20,7 @@ pub fn build_dailies(dailies: &mut Vec<DiaryPage>) -> io::Result<()> {
         let back = if i == 0 { None } else { dailies.get(i - 1) };
         let after = dailies.get(i + 1);
         match write_day_file(&dailies[i], back, after) {
-            Ok(()) => print!(">>>>> Parse {}\r", dailies[i].day.format("%Y/%m/%d")),
+            Ok(()) => print!(">>> Create {} daily\r", dailies[i].day.format("%Y/%m/%d")),
             Err(e) => println!("Error: {}", e.to_string()),
         }
     }

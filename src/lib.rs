@@ -67,15 +67,15 @@ pub fn build() -> io::Result<()> {
         }
     }
     match build_dailies(&mut v) {
-        Ok(()) => println!("\nBuilded!"),
+        Ok(()) => println!("\n>>> Create All Daily Page"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     match build_top_page(&mut v) {
-        Ok(()) => println!(">>> Build toppage"),
+        Ok(()) => println!(">>> Create Top page"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     match build_index_json(&v) {
-        Ok(()) => println!(">>> Builld index.json"),
+        Ok(()) => println!(">>> Create index.json"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     Ok(())

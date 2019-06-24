@@ -27,14 +27,15 @@ fn main() {
             }
         } else {
             match create_diary_template(Local::today().pred()) {
-                Ok(true) => println!(">>> Create date file."),
+                Ok(true) => println!(">>> Create diary/{}.md", Local::today().format("%Y/%m/%d")),
                 Ok(false) => {}
                 Err(e) => println!("Error: {}", e.to_string()),
             }
         }
     } else {
+        println!("> Build Diary...");
         match build() {
-            Ok(()) => println!(">>> All Dailies built"),
+            Ok(()) => println!("> All Dailies build completed."),
             Err(e) => println!("Error: {}", e.to_string()),
         }
     }
