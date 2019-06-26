@@ -27,7 +27,7 @@ fn main() {
             }
         } else {
             match create_diary_template(Local::today().pred()) {
-                Ok(true) => println!(">>> Create diary/{}.md", Local::today().format("%Y/%m/%d")),
+                Ok(true) => println!(">>> Create diary/{}.md", Local::today().pred().format("%Y/%m/%d")),
                 Ok(false) => {}
                 Err(e) => println!("Error: {}", e.to_string()),
             }
