@@ -20,7 +20,6 @@ iframe {
   margin: auto;
 }
 
-
 img {
   border: 1px solid #c3c3c3;
 }
@@ -223,6 +222,8 @@ code {
   padding-left: 1rem;
   margin-bottom: 1rem;
   text-indent: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.5rem;
 }
 
 .daily hr {
