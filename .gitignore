@@ -5,3 +5,4 @@ dest/
 docs/
 .vscode/
 .firebaserc
+.firebase/
