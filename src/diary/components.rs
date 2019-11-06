@@ -3,16 +3,13 @@ use maud::{html, Markup, PreEscaped, DOCTYPE};
 const HEADER_WORD: &str = "You will understand if you come here, You'll overlook your sleepiness";
 
 const CSSLIST: [&str; 4] = [
-    "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css",
-    "/static/css/index.css",
+    "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css",
     "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css",
     "https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css",
+    "/static/css/index.css",
 ];
 
-const CSSFONTS: [&str; 2] = [
-    "https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap",
-    "https://fonts.googleapis.com/css?family=Caveat|Kelly+Slab&display=swap",
-];
+const CSSFONTS: [&str; 1] = ["https://fonts.googleapis.com/css?family=Caveat|Kelly+Slab|Noto+Sans+JP&display=swap"];
 
 const HIGHLIGHT_JS: &str =
     r##"<script async src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script><script>window.addEventListener("load", function() { hljs.initHighlighting() });</script>
@@ -43,7 +40,7 @@ fn footer() -> Markup {
     }
 }
 
-pub fn page(title: &str, page: Markup) -> Markup {
+pub fn page(title: &str, is_diary_page: bool, page: Markup) -> Markup {
     html! {
         (DOCTYPE)
         html lang="ja" {
@@ -56,13 +53,15 @@ pub fn page(title: &str, page: Markup) -> Markup {
                 @for url in &CSSFONTS {
                     link rel="stylesheet" href=(PreEscaped(url));
                 }
-                (PreEscaped(HIGHLIGHT_JS))
                 title {(title)}
             }
             body {
                 (header())
                 (page)
                 (footer())
+                @if is_diary_page {
+                    (PreEscaped(HIGHLIGHT_JS))
+                }
             }
         }
     }

@@ -17,6 +17,7 @@ impl DiaryPage {
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;
         let markup = page(
             &title,
+            true,
             html! {
                 div.row.navigation {
                     div class=("col-xs-6")  {

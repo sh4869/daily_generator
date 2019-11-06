@@ -16,6 +16,7 @@ pub fn build_top_page(dailies: &mut Vec<DiaryPage>) -> io::Result<()> {
         let end = if x == page_size - 1 { dailies.len() } else { ((x + 1) * PER_PAGE) as usize };
         let markup = page(
             "Daily Bread",
+            false,
             html! {
                 div.row {
                     @for daily in dailies.as_slice()[start..end].iter() {
