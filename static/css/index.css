@@ -46,19 +46,21 @@ th {
   background: #f4f4f4;
 }
 
-time {
+time.diary {
   font-family: "Kelly Slab";
-  display: inline-block;
+  display: block;
+  margin: 0 auto;
+  width: 120px;
   padding: 0.3rem 0.3rem;
   font-size: 1.2rem;
   background: #dbeeff;
   border-radius: 3px;
   font-weight: 600;
-  margin: 0;
 }
 
-time.small {
+time.diary.small {
   font-size: 0.9rem;
+  width: 90px;
 }
 
 code,
@@ -220,7 +222,7 @@ code {
   padding-left: 1rem;
   margin-bottom: 1rem;
   text-indent: 1rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.5rem;
 }
 
