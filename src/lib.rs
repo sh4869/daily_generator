@@ -82,7 +82,7 @@ pub fn build() -> io::Result<()> {
 }
 
 pub fn create_diary_template(date: Date<Local>) -> io::Result<bool> {
-    let path = "diary/".to_string() + &date.format("%Y/%m/%d").to_string() + &".md";;
+    let path = "diary/".to_string() + &date.format("%Y/%m/%d").to_string() + &".md";
     if !Path::new(&path).exists() {
         let parent = Path::new(&path).parent().unwrap();
         if parent.exists() == false {
