@@ -47,7 +47,7 @@ th {
 }
 
 time.diary {
-  font-family: "Kelly Slab";
+  font-family: "Kelly Slab", cursive;
   display: block;
   margin: 0 auto;
   width: 120px;
