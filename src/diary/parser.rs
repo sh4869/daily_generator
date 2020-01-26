@@ -47,7 +47,7 @@ pub fn parse_daily(path: &Path) -> io::Result<DiaryPage> {
     // タイトルの取得
     let title;
     match get_title(&mut file_content) {
-        Ok(s) => title = s,
+        Ok(s) => title = if s.is_empty() { String::from("無題") } else { s },
         Err(e) => {
             return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
         }

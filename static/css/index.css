@@ -3,6 +3,7 @@ body {
   background: #ffffff;
   max-width: 800px;
   width: 95%;
+  font-size: 95%;
   margin: 0 auto;
 }
 
@@ -50,18 +51,11 @@ time.diary {
   font-family: "Kelly Slab", cursive;
   display: block;
   margin: 0 auto;
-  width: 120px;
   padding: 0.3rem 0.3rem;
-  font-size: 1.2rem;
-  background: #dbeeff;
-  border-radius: 3px;
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
-time.diary.small {
-  font-size: 0.9rem;
-  width: 90px;
-}
 
 code,
 tt {
@@ -94,21 +88,21 @@ code {
   margin-top: 1rem;
   margin-bottom: 1rem;
   color: black;
-  font-size: 5rem;
+  font-size: 3rem;
   font-family: "Caveat", cursive;
 }
 
 #header p {
   color: #484848;
   font-family: "Caveat", cursive;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 
 /** Footer **/
 
 #footer {
   text-align: center;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 }
 
 #footer a {
@@ -139,15 +133,16 @@ code {
   display: inline-block;
 }
 
-.day_colum h2 {
+.day_colum .diary_title {
   text-decoration: none;
   color: #111;
   margin-top: 0.4rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.4rem;
+  font-size: 1.2rem;
   display: inline-block;
 }
 
-.day_colum div a h2:hover {
+.day_colum p.diary_title:hover {
   text-decoration: underline;
 }
 
@@ -181,7 +176,7 @@ code {
 }
 
 .navigation .day {
-  margin: 0.5em;
+  margin: 0.5rem;
 }
 
 .navigation .day a {
@@ -200,7 +195,7 @@ code {
   display: block;
   color: black;
   padding: 10px;
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   margin-top: 0.5rem;
   margin-bottom: 2rem;
 }

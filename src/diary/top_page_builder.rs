@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 
-const PER_PAGE: i32 = 40;
+const PER_PAGE: i32 = 60;
 
 pub fn build_top_page(dailies: &mut Vec<DiaryPage>) -> io::Result<()> {
     dailies.sort_by(|a, b| b.day.cmp(&a.day));
@@ -21,11 +21,11 @@ pub fn build_top_page(dailies: &mut Vec<DiaryPage>) -> io::Result<()> {
                 div.row {
                     @for daily in dailies.as_slice()[start..end].iter() {
                         @let link = daily.day.format("/%Y/%m/%d").to_string() + ".html";
-                        div class=("col-xs-12 col-md-6") {
+                        div class=("col-xs-12 col-md-4") {
                             div.day_colum {
                                 time class=("diary") {(daily.day.format("%Y/%m/%d"))};
                                 a href=(link) {
-                                    h2 {(daily.title)}
+                                    p.diary_title {(daily.title)}
                                 }
                             }
                         }
