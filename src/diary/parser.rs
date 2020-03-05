@@ -7,6 +7,10 @@ use std::io::prelude::*;
 use std::io::{Error, ErrorKind};
 use std::path::{Path, MAIN_SEPARATOR};
 
+const EMBEDLY_TAG: &str = r##"
+<script async src="//cdn.embedly.com/widgets/platform.js"></script>
+"##;
+
 fn get_title(md: &String) -> io::Result<String> {
     let v: Vec<&str> = md.split("---").collect();
     if v.len() < 2 {
@@ -63,7 +67,11 @@ pub fn parse_daily(path: &Path) -> io::Result<DiaryPage> {
         }
     };
     let daily = DiaryPage {
-        content: content,
+        content: if content.find("class=\"embedly-card\"").is_some() {
+            String::from(EMBEDLY_TAG) + &content
+        } else {
+            content
+        },
         title: title,
         day: date,
     };
