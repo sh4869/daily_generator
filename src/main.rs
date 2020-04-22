@@ -16,7 +16,7 @@ fn main() {
             SubCommand::with_name("new")
                 .about("generate new file")
                 .arg(Arg::with_name("all").short("a").help("generate all diary not created")),
-        )
+        ).subcommand(SubCommand::with_name("today").about("generate today file"))
         .get_matches();
 
     if let Some(matches_new) = matches.subcommand_matches("new") {
@@ -31,6 +31,12 @@ fn main() {
                 Ok(false) => {}
                 Err(e) => println!("Error: {}", e.to_string()),
             }
+        }
+    } else if matches.subcommand_matches("today").is_some() {
+        match create_diary_template(Local::today()) {
+            Ok(true) => println!(">>> Create diary/{}.md", Local::today().format("%Y/%m/%d")),
+            Ok(false) => {}
+            Err(e) => println!("Error: {}",e.to_string()),
         }
     } else {
         println!("> Build Diary...");
