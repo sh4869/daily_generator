@@ -35,7 +35,7 @@ jobs:
       env:
         INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_HOOKS }}
       with:
-        text: deploy diaries.
+        text: "[DIARY] DEPLOY COMPLETE"
         attachments: |
           [
             {
