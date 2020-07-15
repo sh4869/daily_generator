@@ -13,15 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install latest nightly
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: nightly
+          override: true
     - uses: actions/checkout@v2
-    - name: Build
-      run: cargo run
-
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
+    - name: Run cargo check
+      uses: actions-rs/cargo@v1
+      with:
+        command: run
     - name: GitHub Action for Firebase
       uses: w9jds/firebase-action@v1.5.0
       with:
