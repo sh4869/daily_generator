@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'diary'
+      - 'master'
 
 env:
   CARGO_TERM_COLOR: always
