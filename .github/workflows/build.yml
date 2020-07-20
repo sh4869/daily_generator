@@ -2,7 +2,9 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ 'master', 'diary' ]
+    branches:
+      - master
+      - diary
 
 env:
   CARGO_TERM_COLOR: always
