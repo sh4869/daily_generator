@@ -16,6 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: master
+        path: '.'
     - uses: actions/checkout@v2
       with:
         ref: diary
