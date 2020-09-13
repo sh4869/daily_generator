@@ -19,13 +19,13 @@ fn main() {
     if matches.subcommand_matches("ytd").is_some() {
         match create_diary_template(Local::today().pred()) {
             Ok(true) => println!(">>> Create diary/{}.md", Local::today().pred().format("%Y/%m/%d")),
-            Ok(false) => {}
+            Ok(false) => println!("diary/{}.md already exists.", Local::today().pred().format("%Y/%m/%d")),
             Err(e) => println!("Error: {}", e.to_string()),
         }
     } else if matches.subcommand_matches("today").is_some() {
         match create_diary_template(Local::today()) {
             Ok(true) => println!(">>> Create diary/{}.md", Local::today().format("%Y/%m/%d")),
-            Ok(false) => {}
+            Ok(false) => println!("diary/{}.md already exists.", Local::today().format("%Y/%m/%d")),
             Err(e) => println!("Error: {}", e.to_string()),
         }
     } else {
