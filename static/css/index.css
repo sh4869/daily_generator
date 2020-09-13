@@ -17,6 +17,7 @@ twitter-widget {
 iframe {
   display: block;
   margin: auto;
+  max-width: 100%;
 }
 
 img {
@@ -55,7 +56,6 @@ time.diary {
   font-size: 0.9rem;
   font-weight: 600;
 }
-
 
 code,
 tt {
@@ -145,6 +145,8 @@ code {
 .day_colum p.diary_title:hover {
   text-decoration: underline;
 }
+
+/* ページング */
 
 .paging {
   font-family: "Caveat", cursive;
