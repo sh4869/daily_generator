@@ -8,7 +8,7 @@ const CSSLIST: [&str; 3] = [
     "/static/css/index.css",
 ];
 
-const CSSFONTS: [&str; 1] = ["https://fonts.googleapis.com/css?family=Caveat|Kelly+Slab|Noto+Sans+JP&display=swap"];
+const CSSFONTS: [&str; 1] = ["https://fonts.googleapis.com/css2?family=Caveat&family=Kelly+Slab&family=Noto+Sans+JP&display=swap"];
 
 const HIGHLIGHT_JS: &str = r##"<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/hopscotch.min.css">
     <script async src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
