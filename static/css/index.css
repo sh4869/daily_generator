@@ -234,3 +234,17 @@ code {
   margin-left: 1em;
   margin-bottom: 5em;
 }
+
+blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0.2rem 0.5rem;
+  text-align: center;
+}
+
+blockquote > p::before {
+  content: "＞　";
+}
+blockquote > p {
+  color: #8c8c8c !important;
+}
