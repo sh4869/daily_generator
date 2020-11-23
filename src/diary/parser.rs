@@ -75,6 +75,5 @@ pub fn parse_daily(path: &Path) -> io::Result<DiaryPage> {
         title: title,
         day: date,
     };
-    print!(">>>>> Parse {}\r", daily.day.format("%Y/%m/%d"));
     Ok(daily)
 }

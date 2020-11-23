@@ -1,14 +1,15 @@
 [package]
-name = "diary_generator"
+name = "dgen"
 version = "0.1.1"
 authors = ["sh4869 <nobuk4869@gmail.com>"]
 
 [dependencies]
-pulldown-cmark = "0.1.2"
-maud = "0.19.0"
+pulldown-cmark = "0.8.0"
+maud = "0.22.1"
 chrono = "0.4"
 glob = "0.2.11"
 fs_extra = "1.1.0"
 clap = "2.32.0"
 serde_json = "1.0"
+indicatif = "0.15.0"
 serde = { version = "1.0", features = ["derive"] }

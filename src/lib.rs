@@ -1,6 +1,7 @@
 #![feature(proc_macro_hygiene)]
 extern crate chrono;
 extern crate fs_extra;
+extern crate indicatif;
 extern crate maud;
 extern crate pulldown_cmark;
 extern crate serde;
@@ -17,20 +18,24 @@ use std::io::prelude::*;
 use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
 
-pub fn prepear_dir() -> io::Result<()> {
+pub fn prepear_dir() -> io::Result<bool> {
+    let mut result = false;
     if !Path::new("docs/").exists() {
         fs::create_dir("docs/")?;
+        result = true;
     }
     if !Path::new("docs/static").exists() {
         fs::create_dir("docs/static")?;
+        result = true;
     }
     if !Path::new("docs/pages").exists() {
         fs::create_dir("docs/pages")?;
+        result = true;
     }
-    Ok(())
+    Ok(result)
 }
 
-pub fn copy_css_image() -> io::Result<()> {
+pub fn copy_static_files() -> io::Result<()> {
     let mut options = CopyOptions::new(); //Initialize default values for CopyOptions
     options.overwrite = true;
     for entry in fs::read_dir("static")? {
@@ -45,37 +50,45 @@ pub fn copy_css_image() -> io::Result<()> {
 
 pub fn build() -> io::Result<()> {
     match prepear_dir() {
-        Ok(()) => println!(">>> Create docs directory"),
+        Ok(true) => println!("|> create docs directory"),
+        Err(e) => println!("Error: {}", e.to_string()),
+        _ => (),
+    }
+    match copy_static_files() {
+        Ok(()) => println!("|> copied css files"),
         Err(e) => println!("Error: {}", e.to_string()),
     }
-    match copy_css_image() {
-        Ok(()) => println!(">>> Copied css files."),
-        Err(e) => println!("Error: {}", e.to_string()),
+    let paths: Vec<PathBuf>;
+    match glob::glob("diary/**/*.md") {
+        Ok(v) => paths = v.flat_map(|x| x).collect::<Vec<_>>(),
+        Err(e) => return Err(Error::new(ErrorKind::InvalidData, e.to_string())),
     }
-    let mut paths: Vec<PathBuf> = Vec::new();
-    for entry in glob::glob("diary/**/*.md").map_err(|err| Error::new(ErrorKind::InvalidData, err))? {
-        match entry {
-            Ok(path) => paths.push(path),
-            Err(e) => println!("{}", e.to_string()),
-        }
-    }
+    println!("|> parse diary source files");
     let mut v = Vec::new();
+    let pb = indicatif::ProgressBar::new(paths.len() as u64);
     for path in paths {
         match parse_daily(path.as_path()) {
-            Ok(daily) => v.push(daily),
+            Ok(daily) => {
+                v.push(daily);
+                pb.inc(1);
+            }
             Err(e) => println!("\r\n{}", e),
         }
     }
+    pb.finish_and_clear();
+    println!("|> generate diary files");
     match build_dailies(&mut v) {
-        Ok(()) => println!("\n>>> Create All Daily Page"),
+        Ok(()) => (),
         Err(e) => println!("Error: {}", e.to_string()),
     }
+    println!("|> generate top pages");
     match build_top_page(&mut v) {
-        Ok(()) => println!(">>> Create Top page"),
+        Ok(()) => (),
         Err(e) => println!("Error: {}", e.to_string()),
     }
+    println!("|> generate index.json");
     match build_index_json(&v) {
-        Ok(()) => println!(">>> Create index.json"),
+        Ok(()) => (),
         Err(e) => println!("Error: {}", e.to_string()),
     }
     Ok(())
