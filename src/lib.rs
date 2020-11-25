@@ -4,13 +4,16 @@ extern crate fs_extra;
 extern crate indicatif;
 extern crate maud;
 extern crate pulldown_cmark;
+extern crate rss;
 extern crate serde;
 extern crate serde_json;
+extern crate voca_rs;
 
 pub mod diary;
 
 use self::diary::{
-    builder::BuilderOption, builder::DiaryBuilder, diary_builder::DiaryDayFilesBuilder, diary_page::DiaryPage, index_builder::IndexBuilder, parser::parse_daily, top_page_builder::TopPageBuilder,
+    builder::BuilderOption, builder::DiaryBuilder, diary_builder::DiaryDayFilesBuilder, diary_page::DiaryPage, index_builder::IndexBuilder, parser::parse_daily, rss_builder::RssBuilder,
+    top_page_builder::TopPageBuilder,
 };
 use chrono::{Date, Local};
 use fs_extra::dir::*;
@@ -77,11 +80,13 @@ pub fn build(dest: &str) -> io::Result<()> {
             Err(e) => println!("\r\n{}", e),
         }
     }
-    let bp: BuilderOption = BuilderOption { dest: dest };
     pb.finish_and_clear();
+    let bp: BuilderOption = BuilderOption { dest: dest };
+    // TODO: ここどうにかしたい
     build_by_builder(&DiaryDayFilesBuilder::new(&bp), &mut v);
     build_by_builder(&TopPageBuilder::new(&bp), &mut v);
     build_by_builder(&IndexBuilder::new(&bp), &mut v);
+    build_by_builder(&RssBuilder::new(&bp), &mut v);
     Ok(())
 }
 

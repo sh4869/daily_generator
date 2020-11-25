@@ -12,4 +12,6 @@ fs_extra = "1.1.0"
 clap = "2.32.0"
 serde_json = "1.0"
 indicatif = "0.15.0"
+rss = "1.0"
+voca_rs = "1.13.0"
 serde = { version = "1.0", features = ["derive"] }
