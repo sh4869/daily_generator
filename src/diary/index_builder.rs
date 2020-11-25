@@ -1,5 +1,5 @@
 use crate::diary::diary_page::DiaryPage;
-use diary::builder::{BuilderOption, DiaryBuilder};
+use diary::builder::{BuilderOption, DiaryBuilder, DiaryBuilderGen};
 use serde::Serialize;
 use std::fs::File;
 use std::io;
@@ -16,12 +16,15 @@ pub struct IndexBuilder<'a> {
     option: &'a BuilderOption<'a>,
 }
 
-impl<'a> DiaryBuilder<'a>  for IndexBuilder<'a> {
-    fn builder_name(&self) -> &'static str {
-        "index builder"
-    }
+impl<'a> DiaryBuilderGen<'a> for IndexBuilder<'a> {
     fn new(opt: &'a BuilderOption) -> Self {
         IndexBuilder { option: opt }
+    }
+}
+
+impl<'a> DiaryBuilder<'a> for IndexBuilder<'a> {
+    fn builder_name(&self) -> &'static str {
+        "index builder"
     }
     fn build(&self, diaries: &mut Vec<DiaryPage>) -> io::Result<()> {
         let index_contents = diaries
@@ -29,7 +32,7 @@ impl<'a> DiaryBuilder<'a>  for IndexBuilder<'a> {
             .map(|d| IndexContent {
                 title: String::from(d.clone().title),
                 body: String::from(d.clone().content),
-                url: String::from(d.clone().get_url()),
+                url: String::from(self.option.url.to_string() + &d.clone().get_path()),
             })
             .collect::<Vec<_>>();
         let j = serde_json::to_string(&index_contents)?;

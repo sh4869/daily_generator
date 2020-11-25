@@ -1,4 +1,4 @@
-use diary::builder::{BuilderOption, DiaryBuilder};
+use diary::builder::{BuilderOption, DiaryBuilder, DiaryBuilderGen};
 use diary::diary_page::DiaryPage;
 use std::fs::{self, File};
 use std::io;
@@ -24,21 +24,21 @@ impl DiaryDayFilesBuilder<'_> {
     }
 }
 
+impl<'a> DiaryBuilderGen<'a> for DiaryDayFilesBuilder<'a> {
+    fn new(opt: &'a BuilderOption) -> DiaryDayFilesBuilder<'a> {
+        DiaryDayFilesBuilder { option: opt }
+    }
+}
+
 impl<'a> DiaryBuilder<'a> for DiaryDayFilesBuilder<'a> {
     fn builder_name(&self) -> &'static str {
         "diary day file builder"
     }
 
-    fn new(opt: &'a BuilderOption) -> DiaryDayFilesBuilder<'a> {
-        DiaryDayFilesBuilder { option: opt }
-    }
-
     fn build(&self, diaries: &mut Vec<DiaryPage>) -> io::Result<()> {
         let pb = ProgressBar::new(diaries.len() as u64);
         for i in 0..diaries.len() {
-            let back = if i == 0 { None } else { diaries.get(i - 1) };
-            let after = diaries.get(i + 1);
-            match self.write_day_file(&diaries[i], back, after) {
+            match self.write_day_file(&diaries[i], if i == 0 { None } else { diaries.get(i - 1) }, diaries.get(i + 1)) {
                 Ok(()) => pb.inc(1),
                 Err(e) => println!("Error: {}", e.to_string()),
             }

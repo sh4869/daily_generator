@@ -10,8 +10,8 @@ pub struct DiaryPage {
 }
 
 impl DiaryPage {
-    pub fn get_url(&self) -> String {
-        "https://diary.sh4869.net".to_string() + &self.day.format("/%Y/%m/%d").to_string() + &".html"
+    pub fn get_path(&self) -> String {
+        self.day.format("/%Y/%m/%d").to_string() + &".html"
     }
     pub fn generate_html(&self, before: Option<&DiaryPage>, after: Option<&DiaryPage>) -> String {
         let title = self.day.format("%Y/%m/%d").to_string() + &" - " + &self.title;

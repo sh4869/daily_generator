@@ -12,8 +12,8 @@ extern crate voca_rs;
 pub mod diary;
 
 use self::diary::{
-    builder::BuilderOption, builder::DiaryBuilder, diary_builder::DiaryDayFilesBuilder, diary_page::DiaryPage, index_builder::IndexBuilder, parser::parse_daily, rss_builder::RssBuilder,
-    top_page_builder::TopPageBuilder,
+    builder::BuilderOption, builder::DiaryBuilder, builder::DiaryBuilderGen, diary_builder::DiaryDayFilesBuilder, index_builder::IndexBuilder, parser::parse_daily,
+    rss_builder::RssBuilder, top_page_builder::TopPageBuilder,
 };
 use chrono::{Date, Local};
 use fs_extra::dir::*;
@@ -81,22 +81,24 @@ pub fn build(dest: &str) -> io::Result<()> {
         }
     }
     pb.finish_and_clear();
-    let bp: BuilderOption = BuilderOption { dest: dest };
-    // TODO: ここどうにかしたい
-    build_by_builder(&DiaryDayFilesBuilder::new(&bp), &mut v);
-    build_by_builder(&TopPageBuilder::new(&bp), &mut v);
-    build_by_builder(&IndexBuilder::new(&bp), &mut v);
-    build_by_builder(&RssBuilder::new(&bp), &mut v);
-    Ok(())
-}
-
-fn build_by_builder<'a>(builder: &impl DiaryBuilder<'a>, diaries: &mut Vec<DiaryPage>) -> () {
-    println!("|> build by {}", builder.builder_name());
-    match builder.build(diaries) {
-        Ok(()) => (),
-        Err(e) => println!("Error {}", e.to_string()),
+    let bp: BuilderOption = BuilderOption {
+        dest: &dest,
+        url: "https://diary.sh4869.net",
+    };
+    let vec: Vec<Box<dyn DiaryBuilder>> = vec![
+        Box::new(DiaryDayFilesBuilder::new(&bp)),
+        Box::new(TopPageBuilder::new(&bp)),
+        Box::new(IndexBuilder::new(&bp)),
+        Box::new(RssBuilder::new(&bp)),
+    ];
+    for builder in vec {
+        println!("|> build by {}", builder.builder_name());
+        match builder.build(&mut v) {
+            Ok(()) => (),
+            Err(e) => println!("Error {}", e.to_string()),
+        }
     }
-    ()
+    Ok(())
 }
 
 pub fn create_diary_template(date: Date<Local>) -> io::Result<bool> {

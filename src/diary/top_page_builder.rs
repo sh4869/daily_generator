@@ -1,6 +1,6 @@
 use crate::diary::components::page;
 use crate::diary::diary_page::DiaryPage;
-use diary::builder::{BuilderOption, DiaryBuilder};
+use diary::builder::{BuilderOption, DiaryBuilder, DiaryBuilderGen};
 use maud::html;
 use std::fs;
 use std::fs::File;
@@ -14,12 +14,15 @@ pub struct TopPageBuilder<'a> {
     option: &'a BuilderOption<'a>,
 }
 
-impl<'a> DiaryBuilder<'a>  for TopPageBuilder<'a> {
-    fn builder_name(&self) -> &'static str {
-        "top_page_builder"
-    }
+impl<'a> DiaryBuilderGen<'a> for TopPageBuilder<'a> {
     fn new(opt: &'a BuilderOption) -> Self {
         TopPageBuilder { option: opt }
+    }
+}
+
+impl<'a> DiaryBuilder<'a> for TopPageBuilder<'a> {
+    fn builder_name(&self) -> &'static str {
+        "top page builder"
     }
     fn build(&self, diaries: &mut Vec<DiaryPage>) -> io::Result<()> {
         if !Path::new(&(self.option.dest.to_string() + "/pages")).exists() {
