@@ -9,7 +9,9 @@ extern crate serde_json;
 
 pub mod diary;
 
-use self::diary::{diary_builder::build_dailies, index_builder::build_index_json, parser::parse_daily, top_page_builder::build_top_page};
+use self::diary::{
+    builder::BuilderOption, builder::DiaryBuilder, diary_builder::DiaryDayFilesBuilder, diary_page::DiaryPage, index_builder::IndexBuilder, parser::parse_daily, top_page_builder::TopPageBuilder,
+};
 use chrono::{Date, Local};
 use fs_extra::dir::*;
 use std::fs::{self, File};
@@ -48,7 +50,7 @@ pub fn copy_static_files() -> io::Result<()> {
     Ok(())
 }
 
-pub fn build() -> io::Result<()> {
+pub fn build(dest: &str) -> io::Result<()> {
     match prepear_dir() {
         Ok(true) => println!("|> create docs directory"),
         Err(e) => println!("Error: {}", e.to_string()),
@@ -75,23 +77,21 @@ pub fn build() -> io::Result<()> {
             Err(e) => println!("\r\n{}", e),
         }
     }
+    let bp: BuilderOption = BuilderOption { dest: dest };
     pb.finish_and_clear();
-    println!("|> generate diary files");
-    match build_dailies(&mut v) {
-        Ok(()) => (),
-        Err(e) => println!("Error: {}", e.to_string()),
-    }
-    println!("|> generate top pages");
-    match build_top_page(&mut v) {
-        Ok(()) => (),
-        Err(e) => println!("Error: {}", e.to_string()),
-    }
-    println!("|> generate index.json");
-    match build_index_json(&v) {
-        Ok(()) => (),
-        Err(e) => println!("Error: {}", e.to_string()),
-    }
+    build_by_builder(&DiaryDayFilesBuilder::new(&bp), &mut v);
+    build_by_builder(&TopPageBuilder::new(&bp), &mut v);
+    build_by_builder(&IndexBuilder::new(&bp), &mut v);
     Ok(())
+}
+
+fn build_by_builder<'a>(builder: &impl DiaryBuilder<'a>, diaries: &mut Vec<DiaryPage>) -> () {
+    println!("|> build by {}", builder.builder_name());
+    match builder.build(diaries) {
+        Ok(()) => (),
+        Err(e) => println!("Error {}", e.to_string()),
+    }
+    ()
 }
 
 pub fn create_diary_template(date: Date<Local>) -> io::Result<bool> {

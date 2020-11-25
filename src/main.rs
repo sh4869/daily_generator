@@ -3,7 +3,7 @@ extern crate clap;
 extern crate dgen;
 
 use chrono::Local;
-use clap::{App, SubCommand};
+use clap::{App, Arg, SubCommand};
 
 use dgen::{build, create_diary_template};
 
@@ -14,6 +14,7 @@ fn main() {
         .about("diary generator")
         .subcommand(SubCommand::with_name("ytd").about("generate diary template file of yesterday"))
         .subcommand(SubCommand::with_name("today").about("generate diary template file of yesterday"))
+        .arg(Arg::with_name("dest").short("d").long("dest").help("dest directory of generated dailies file").takes_value(true))
         .get_matches();
 
     if matches.subcommand_matches("ytd").is_some() {
@@ -30,8 +31,9 @@ fn main() {
         }
     } else {
         println!("> build diary ");
-        match build() {
-            Ok(()) => println!("> complete !"),
+        let dest = matches.value_of("dest").unwrap_or("docs");
+        match build(dest) {
+            Ok(()) => println!("> complete!"),
             Err(e) => println!("Error: {}", e.to_string()),
         }
     }
