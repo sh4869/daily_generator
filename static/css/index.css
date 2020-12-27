@@ -98,7 +98,19 @@ code {
   font-size: 1.3rem;
 }
 
+#header .link {
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.4rem;
+}
+
+#header .link a {
+  color: black;
+  text-decoration: underline;
+}
+
 /** Footer **/
+
 
 #footer {
   text-align: center;

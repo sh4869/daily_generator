@@ -22,7 +22,12 @@ fn header() -> Markup {
                     h1.title {"Daily Bread"}
                 }
                 p {(HEADER_WORD)}
+                div.link {
+                    p {a href="/rss.xml" target="_blank" rel="noopener noreferrer" {"rss"}}
+                    p {a href="https://sh4869.sh" target="_blank" rel="noopener noreferrer" {"about"}}
+                }
             }
+
         }
     }
 }
