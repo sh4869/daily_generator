@@ -162,23 +162,15 @@ code {
 
 .paging {
   font-family: "Caveat", cursive;
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-align: center;
   margin-bottom: 1em;
-}
-
-.paging p.current {
-  color: black;
-  font-weight: bold;
+  display: flex;
+  justify-content: space-around;
 }
 
 .paging a {
-  text-decoration: none;
   color: #777;
-}
-
-.paging a:hover {
-  text-decoration: underline;
 }
 
 /* 個別ページ */
