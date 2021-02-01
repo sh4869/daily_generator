@@ -12,8 +12,8 @@ extern crate voca_rs;
 pub mod diary;
 
 use self::diary::{
-    builder::BuilderOption, builder::DiaryBuilder, builder::DiaryBuilderGen, diary_builder::DiaryDayFilesBuilder, index_builder::IndexBuilder, parser::parse_daily,
-    rss_builder::RssBuilder, top_page_builder::TopPageBuilder,
+    builder::BuilderOption, builder::DiaryBuilder, builder::DiaryBuilderGen, diary_builder::DiaryDayFilesBuilder, index_builder::IndexBuilder, parser::parse_daily, rss_builder::RssBuilder,
+    top_page_builder::TopPageBuilder,
 };
 use chrono::{Date, Local};
 use fs_extra::dir::*;
@@ -29,10 +29,6 @@ pub fn prepear_dir() -> io::Result<bool> {
         fs::create_dir("docs/")?;
         result = true;
     }
-    if !Path::new("docs/static").exists() {
-        fs::create_dir("docs/static")?;
-        result = true;
-    }
     if !Path::new("docs/pages").exists() {
         fs::create_dir("docs/pages")?;
         result = true;
@@ -41,13 +37,25 @@ pub fn prepear_dir() -> io::Result<bool> {
 }
 
 pub fn copy_static_files() -> io::Result<()> {
-    let mut options = CopyOptions::new(); //Initialize default values for CopyOptions
-    options.overwrite = true;
     for entry in fs::read_dir("static")? {
         let path = entry?.path();
-        match copy(path, "docs/static", &options) {
-            Ok(_d) => {}
-            Err(e) => println!("Error: {}", e.to_string()),
+        if path.is_dir() {
+            let mut options = CopyOptions::new(); //Initialize default values for CopyOptions
+            options.overwrite = true;
+            match copy(path, "docs/", &options) {
+                Ok(_d) => {}
+                Err(e) => println!("Error: {}", e.to_string()),
+            }
+        } else {
+            let mut options = fs_extra::file::CopyOptions::new();
+            options.overwrite = true;
+            match path.file_name() {
+                Some(name) => match fs_extra::file::copy(&path, "docs/".to_string() + name.to_str().expect("dummy"), &options) {
+                    Ok(_d) => {}
+                    Err(e) => println!("Error: {}", e.to_string()),
+                },
+                None => {}
+            }
         }
     }
     Ok(())
