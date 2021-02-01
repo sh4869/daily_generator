@@ -2,11 +2,7 @@ use maud::{html, Markup, PreEscaped, DOCTYPE};
 
 const HEADER_WORD: &str = "You will understand if you come here, You'll overlook your sleepiness";
 
-const CSSLIST: [&str; 3] = [
-    "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css",
-    "https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css",
-    "/static/css/index.css",
-];
+const CSSLIST: [&str; 2] = ["https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css", "/css/index.css"];
 
 const CSSFONTS: [&str; 1] = ["https://fonts.googleapis.com/css2?family=Caveat&family=Kelly+Slab&family=Noto+Sans+JP&display=swap"];
 
@@ -49,12 +45,14 @@ pub fn page(title: &str, is_diary_page: bool, page: Markup) -> Markup {
         (DOCTYPE)
         html lang="ja" {
             head {
-                meta chaset="utf-8";
+                meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
+                meta name="description" content="diary of @sh4869";
                 @for url in &CSSLIST {
                     link rel="stylesheet" href=(url);
                 }
                 @for url in &CSSFONTS {
+                    link rel="preload" href=(PreEscaped(url)) as="style";
                     link rel="stylesheet" href=(PreEscaped(url));
                 }
                 title {(title)}

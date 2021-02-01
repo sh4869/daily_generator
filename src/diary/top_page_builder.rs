@@ -8,7 +8,7 @@ use std::io;
 use std::io::prelude::*;
 use std::path::Path;
 
-const PER_PAGE: i32 = 60;
+const PER_PAGE: i32 = 15;
 
 pub struct TopPageBuilder<'a> {
     option: &'a BuilderOption<'a>,
@@ -24,6 +24,7 @@ impl<'a> DiaryBuilder<'a> for TopPageBuilder<'a> {
     fn builder_name(&self) -> &'static str {
         "top page builder"
     }
+
     fn build(&self, diaries: &mut Vec<DiaryPage>) -> io::Result<()> {
         if !Path::new(&(self.option.dest.to_string() + "/pages")).exists() {
             fs::create_dir(self.option.dest.to_string() + "/pages")?;
@@ -51,22 +52,21 @@ impl<'a> DiaryBuilder<'a> for TopPageBuilder<'a> {
                             }
                         }
                     }
-                    div.row {
-                        @for y in 0..page_size {
-                            div class=("col-xs paging") {
-                                @if y != x {
-                                    @if y == 0 {
-                                        p {
-                                            a href=("/") { "1" }
-                                        }
-                                    } @else {
-                                        p {
-                                            a href=(format!("/pages/{}.html",(y+1))){ ((y+1).to_string()) }
-                                        }
-                                    }
-                                } @else {
-                                    p.current { ((y+1).to_string()) }
+                    div.paging {
+                        @if x != 0 {
+                            @if x == 1 {
+                                p {
+                                    a href=("/") {"prev"}
                                 }
+                            } @else {
+                                p {
+                                    a href=(format!("/pages/{}.html",(x-1))) {"prev"}
+                                }
+                            }
+                        }
+                        @if x != page_size - 1 {
+                            p {
+                                a href=(format!("/pages/{}.html",(x+1))) {"next"}
                             }
                         }
                     }
@@ -75,7 +75,7 @@ impl<'a> DiaryBuilder<'a> for TopPageBuilder<'a> {
             let filename = if x == 0 {
                 self.option.dest.to_string() + &"/index.html".to_string()
             } else {
-                format!("{}/pages/{}.html", self.option.dest, x + 1)
+                format!("{}/pages/{}.html", self.option.dest, x)
             };
             let mut file = File::create(filename)?;
             file.write_all(markup.into_string().as_bytes())?;
