@@ -41,7 +41,7 @@ pub fn build(dest: &str) -> io::Result<()> {
     pb.finish_and_clear();
     let bp: BuilderOption = BuilderOption {
         dest: &dest,
-        url: "https://diary.sh4869.net",
+        url: "https://diary.sh4869.sh",
     };
     let vec: Vec<Box<dyn DiaryBuilder>> = vec![
         Box::new(static_file_builder::StaticFileBuilder::new(&bp)),
@@ -75,15 +75,3 @@ pub fn create_diary_template(date: Date<Local>) -> io::Result<bool> {
     }
 }
 
-pub fn create_templates(since: Date<Local>) -> io::Result<()> {
-    let mut date = since;
-    while date != Local::today() {
-        date = date + chrono::Duration::days(1);
-        match create_diary_template(date) {
-            Ok(true) => println!(">>> Create Template on {}", date.format("%Y/%m/%d")),
-            Ok(false) => {}
-            Err(e) => println!("Error: {}", e.to_string()),
-        }
-    }
-    Ok(())
-}
