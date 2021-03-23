@@ -30,7 +30,6 @@ impl<'a> DiaryBuilder<'a> for TopPageBuilder<'a> {
             fs::create_dir(self.option.dest.to_string() + "/pages")?;
         }
         diaries.sort_by(|a, b| b.day.cmp(&a.day));
-        diaries.retain(|daily| daily.title != "SKIP");
         let page_size = (diaries.len() as i32) / PER_PAGE + 1;
         for x in 0..page_size {
             let start = (x * PER_PAGE) as usize;
@@ -55,19 +54,13 @@ impl<'a> DiaryBuilder<'a> for TopPageBuilder<'a> {
                     div.paging {
                         @if x != 0 {
                             @if x == 1 {
-                                p {
-                                    a href=("/") {"prev"}
-                                }
+                                p { a href=("/") {"prev"} }
                             } @else {
-                                p {
-                                    a href=(format!("/pages/{}.html",(x-1))) {"prev"}
-                                }
+                                p { a href=(format!("/pages/{}.html",(x-1))) {"prev"} }
                             }
                         }
                         @if x != page_size - 1 {
-                            p {
-                                a href=(format!("/pages/{}.html",(x+1))) {"next"}
-                            }
+                            p { a href=(format!("/pages/{}.html",(x+1))) {"next"} }
                         }
                     }
                 },
