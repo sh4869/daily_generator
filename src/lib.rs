@@ -12,7 +12,7 @@ extern crate pulldown_cmark;
 pub mod diary;
 
 use crate::diary::builders::*;
-use crate::diary::{builder::BuilderOption, builder::DiaryBuilder, builder::DiaryBuilderGen, parser::parse_daily};
+use crate::diary::{builder::BuildOption, builder::DiaryBuilder, builder::DiaryBuilderGen, parser::parse_daily};
 use chrono::{Date, Local};
 use std::fs::{self, File};
 use std::io;
@@ -39,13 +39,13 @@ pub fn build(dest: &str) -> io::Result<()> {
         }
     }
     pb.finish_and_clear();
-    let bp: BuilderOption = BuilderOption {
+    let bp: BuildOption = BuildOption {
         dest: &dest,
         url: "https://diary.sh4869.sh",
     };
     let vec: Vec<Box<dyn DiaryBuilder>> = vec![
         Box::new(static_file_builder::StaticFileBuilder::new(&bp)),
-        Box::new(diary_builder::DiaryDayFilesBuilder::new(&bp)),
+        Box::new(diary_page_builder::DiaryPageBuilder::new(&bp)),
         Box::new(top_page_builder::TopPageBuilder::new(&bp)),
         Box::new(index_builder::IndexBuilder::new(&bp)),
         Box::new(rss_builder::RssBuilder::new(&bp)),
