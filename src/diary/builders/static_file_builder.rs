@@ -1,4 +1,4 @@
-use diary::builder::{BuilderOption, DiaryBuilder, DiaryBuilderGen};
+use diary::builder::{BuildOption, DiaryBuilder, DiaryBuilderGen};
 use diary::diary_page::DiaryPage;
 use fs_extra::dir::*;
 use std::fs;
@@ -6,11 +6,11 @@ use std::io;
 use std::path::Path;
 
 pub struct StaticFileBuilder<'a> {
-    option: &'a BuilderOption<'a>,
+    option: &'a BuildOption<'a>,
 }
 
 impl<'a> DiaryBuilderGen<'a> for StaticFileBuilder<'a> {
-    fn new(opt: &'a BuilderOption) -> Self {
+    fn new(opt: &'a BuildOption) -> Self {
         StaticFileBuilder { option: opt }
     }
 }

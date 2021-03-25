@@ -1,27 +1,27 @@
-use diary::builder::{BuilderOption, DiaryBuilder, DiaryBuilderGen};
+use diary::builder::{BuildOption, DiaryBuilder, DiaryBuilderGen};
 use diary::diary_page::DiaryPage;
-use rss::ChannelBuilder;
-use rss::GuidBuilder;
-use rss::ItemBuilder;
+use rss::{ChannelBuilder, GuidBuilder, ItemBuilder};
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 use voca_rs::strip::strip_tags;
 
 pub struct RssBuilder<'a> {
-    option: &'a BuilderOption<'a>,
+    option: &'a BuildOption<'a>,
 }
 
 impl<'a> DiaryBuilderGen<'a> for RssBuilder<'a> {
-    fn new(opt: &'a BuilderOption) -> Self {
+    fn new(opt: &'a BuildOption) -> Self {
         RssBuilder { option: opt }
     }
 }
 
 impl<'a> DiaryBuilder<'a> for RssBuilder<'a> {
+
     fn builder_name(&self) -> &'static str {
         "rss builder"
     }
+
     fn build(&self, diaries: &mut Vec<DiaryPage>) -> io::Result<()> {
         diaries.sort_by(|a, b| b.day.cmp(&a.day));
         let items = diaries[0..100]

@@ -1,6 +1,6 @@
 use crate::diary::components::page;
 use crate::diary::diary_page::DiaryPage;
-use diary::builder::{BuilderOption, DiaryBuilder, DiaryBuilderGen};
+use diary::builder::{BuildOption, DiaryBuilder, DiaryBuilderGen};
 use maud::html;
 use std::fs;
 use std::fs::File;
@@ -11,11 +11,11 @@ use std::path::Path;
 const PER_PAGE: i32 = 15;
 
 pub struct TopPageBuilder<'a> {
-    option: &'a BuilderOption<'a>,
+    option: &'a BuildOption<'a>,
 }
 
 impl<'a> DiaryBuilderGen<'a> for TopPageBuilder<'a> {
-    fn new(opt: &'a BuilderOption) -> Self {
+    fn new(opt: &'a BuildOption) -> Self {
         TopPageBuilder { option: opt }
     }
 }

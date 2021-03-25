@@ -1,5 +1,5 @@
 use crate::diary::diary_page::DiaryPage;
-use diary::builder::{BuilderOption, DiaryBuilder, DiaryBuilderGen};
+use diary::builder::{BuildOption, DiaryBuilder, DiaryBuilderGen};
 use serde::Serialize;
 use std::fs::File;
 use std::io;
@@ -13,11 +13,11 @@ struct IndexContent {
 }
 
 pub struct IndexBuilder<'a> {
-    option: &'a BuilderOption<'a>,
+    option: &'a BuildOption<'a>,
 }
 
 impl<'a> DiaryBuilderGen<'a> for IndexBuilder<'a> {
-    fn new(opt: &'a BuilderOption) -> Self {
+    fn new(opt: &'a BuildOption) -> Self {
         IndexBuilder { option: opt }
     }
 }
