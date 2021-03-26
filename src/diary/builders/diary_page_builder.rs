@@ -21,52 +21,8 @@ impl DiaryPageBuilder<'_> {
             fs::create_dir_all(parent.to_str().unwrap())?;
         }
         let mut file = File::create(&destpath)?;
-        file.write_all(self.generate_html(target, before, after).as_bytes())?;
+        file.write_all(generate_html(target, before, after).as_bytes())?;
         Ok(())
-    }
-
-    fn generate_html(&self, target: &DiaryPage, before: Option<&DiaryPage>, after: Option<&DiaryPage>) -> String {
-        let title = target.day.format("%Y/%m/%d").to_string() + &" - " + &target.title;
-        let markup = page(
-            &title,
-            true,
-            html! {
-                div.row.navigation {
-                    div class=("col-xs-6")  {
-                        @if after.is_some() {
-                            time.small.diary {(after.unwrap().day.format("%Y/%m/%d"))}
-                            div.day {
-                                a href=(after.unwrap().get_path()) {
-                                    p {(&after.unwrap().title)}
-                                }
-                            }
-                        }
-                    }
-                    div class=("col-xs-6") {
-                        @if before.is_some() {
-                            time.small.diary {(before.unwrap().day.format("%Y/%m/%d"))}
-                            div.day {
-                                a href=(before.unwrap().get_path()) {
-                                    p {(&before.unwrap().title)}
-                                }
-                            }
-                        }
-                    }
-                }
-                div.row {
-                    div class=("col-xs-12"){
-                        div.info {
-                            time.diary {(target.day.format("%Y/%m/%d"))};
-                            h1 {(target.title)};
-                        }
-                        div.daily {
-                            (PreEscaped(&target.content))
-                        }
-                    }
-                }
-            },
-        );
-        return markup.into_string();
     }
 }
 
@@ -92,4 +48,48 @@ impl<'a> DiaryBuilder<'a> for DiaryPageBuilder<'a> {
         pb.finish_and_clear();
         Ok(())
     }
+}
+
+fn generate_html(target: &DiaryPage, before: Option<&DiaryPage>, after: Option<&DiaryPage>) -> String {
+    let title = target.day.format("%Y/%m/%d").to_string() + &" - " + &target.title;
+    let markup = page(
+        &title,
+        true,
+        html! {
+            div.row.navigation {
+                div class=("col-xs-6")  {
+                    @if after.is_some() {
+                        time.small.diary {(after.unwrap().day.format("%Y/%m/%d"))}
+                        div.day {
+                            a href=(after.unwrap().get_path()) {
+                                p {(&after.unwrap().title)}
+                            }
+                        }
+                    }
+                }
+                div class=("col-xs-6") {
+                    @if before.is_some() {
+                        time.small.diary {(before.unwrap().day.format("%Y/%m/%d"))}
+                        div.day {
+                            a href=(before.unwrap().get_path()) {
+                                p {(&before.unwrap().title)}
+                            }
+                        }
+                    }
+                }
+            }
+            div.row {
+                div class=("col-xs-12"){
+                    div.info {
+                        time.diary {(target.day.format("%Y/%m/%d"))};
+                        h1 {(target.title)};
+                    }
+                    div.daily {
+                        (PreEscaped(&target.content))
+                    }
+                }
+            }
+        },
+    );
+    return markup.into_string();
 }
