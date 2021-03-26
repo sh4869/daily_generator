@@ -23,7 +23,6 @@ fn header() -> Markup {
                     p {a href="https://sh4869.net" target="_blank" rel="noopener noreferrer" {"about"}}
                 }
             }
-
         }
     }
 }
@@ -33,7 +32,7 @@ fn footer() -> Markup {
         div.row {
             div#footer class=("col-xs-12") {
                 footer {
-                    p {(PreEscaped("&copy; 2017-2020 <a href=\"http://sh4869.net\">sh4869</a>") )}
+                    p {(PreEscaped("&copy; 2017-2021 Nobuhiro Kasai") )}
                 }
             }
         }
