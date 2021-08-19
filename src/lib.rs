@@ -3,11 +3,11 @@ extern crate chrono;
 extern crate fs_extra;
 extern crate indicatif;
 extern crate maud;
+extern crate pulldown_cmark;
 extern crate rss;
 extern crate serde;
 extern crate serde_json;
 extern crate voca_rs;
-extern crate pulldown_cmark;
 
 pub mod diary;
 
@@ -60,18 +60,30 @@ pub fn build(dest: &str) -> io::Result<()> {
     Ok(())
 }
 
+fn template() -> io::Result<String> {
+    let template_path = "diary/template.md".to_string();
+    let mut file_content = String::new();
+    match File::open(Path::new(&template_path)) {
+        Ok(mut d) => {
+            d.read_to_string(&mut file_content)?;
+            return Ok(file_content);
+        }
+        Err(_) => return Ok("---\ntitle:\n---\n".to_string()),
+    }
+}
+
 pub fn create_diary_template(date: Date<Local>) -> io::Result<bool> {
     let path = "diary/".to_string() + &date.format("%Y/%m/%d").to_string() + &".md";
+    let template = template()?;
     if !Path::new(&path).exists() {
         let parent = Path::new(&path).parent().unwrap();
         if parent.exists() == false {
             fs::create_dir_all(parent.to_str().unwrap())?;
         }
         let mut file = File::create(&path)?;
-        file.write_all("---\ntitle:\n---\n".as_bytes())?;
+        file.write_all(template.as_bytes())?;
         Ok(true)
     } else {
         Ok(false)
     }
 }
-

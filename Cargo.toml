@@ -5,13 +5,13 @@ authors = ["sh4869 <nobuk4869@gmail.com>"]
 
 [dependencies]
 pulldown-cmark = "0.8.0"
-maud = "0.22.1"
+maud = "0.22.2"
 chrono = "0.4"
-glob = "0.2.11"
-fs_extra = "1.1.0"
-clap = "2.32.0"
+glob = "0.3.0"
+fs_extra = "1.2.0"
+clap = "2.33.3"
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 indicatif = "0.15.0"
 rss = "1.0"
 voca_rs = "1.13.0"
-serde = { version = "1.0", features = ["derive"] }
