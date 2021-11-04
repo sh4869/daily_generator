@@ -26,16 +26,18 @@ pub fn build(dest: &str) -> io::Result<()> {
         Ok(v) => paths = v.flat_map(|x| x).collect::<Vec<_>>(),
         Err(e) => return Err(Error::new(ErrorKind::InvalidData, e.to_string())),
     }
-    println!("|> parse diary source files");
+    println!("> parse diary source files");
     let mut v = Vec::new();
     let pb = indicatif::ProgressBar::new(paths.len() as u64);
     for path in paths {
-        match parse_daily(path.as_path()) {
-            Ok(daily) => {
-                v.push(daily);
-                pb.inc(1);
+        if !path.ends_with("template.md") {
+            match parse_daily(path.as_path()) {
+                Ok(daily) => {
+                    v.push(daily);
+                    pb.inc(1);
+                }
+                Err(_) => {}
             }
-            Err(e) => println!("\r\n{}", e),
         }
     }
     pb.finish_and_clear();
@@ -51,7 +53,7 @@ pub fn build(dest: &str) -> io::Result<()> {
         Box::new(rss_builder::RssBuilder::new(&bp)),
     ];
     for builder in vec {
-        println!("|> build by {}", builder.builder_name());
+        println!("> build by {}", builder.builder_name());
         match builder.build(&mut v) {
             Ok(()) => (),
             Err(e) => println!("Error {}", e.to_string()),
