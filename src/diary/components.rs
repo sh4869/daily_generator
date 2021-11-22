@@ -31,7 +31,7 @@ fn footer() -> Markup {
         div.row {
             div#footer class=("col-xs-12") {
                 footer {
-                    p {(PreEscaped("&copy; 2017-2021 Nobuhiro Kasai") )}
+                    p {a href="https://github.com/sh4869/diary" target="_blank" rel="noopener noreferrer" {"GitHub"}}
                 }
             }
         }
