@@ -12,7 +12,7 @@ extern crate voca_rs;
 pub mod diary;
 
 use crate::diary::builders::*;
-use crate::diary::{builder::BuildOption, builder::DiaryBuilder, builder::DiaryBuilderGen, parser::parse_daily};
+use crate::diary::{builder::BuildOption, builder::DiaryBuilder, builder::DiaryBuilderGen, parser::parse_diary};
 use chrono::{Date, Local};
 use std::fs::{self, File};
 use std::io;
@@ -31,9 +31,9 @@ pub fn build(dest: &str) -> io::Result<()> {
     let pb = indicatif::ProgressBar::new(paths.len() as u64);
     for path in paths {
         if !path.ends_with("template.md") {
-            match parse_daily(path.as_path()) {
-                Ok(daily) => {
-                    v.push(daily);
+            match parse_diary(path.as_path()) {
+                Ok(diary) => {
+                    v.push(diary);
                     pb.inc(1);
                 }
                 Err(_) => {}

@@ -84,7 +84,7 @@ fn generate_html(target: &DiaryPage, before: Option<&DiaryPage>, after: Option<&
                         time.diary {(target.day.format("%Y/%m/%d"))};
                         h1 {(target.title)};
                     }
-                    div.daily {
+                    div.diary {
                         (PreEscaped(&target.content))
                     }
                 }

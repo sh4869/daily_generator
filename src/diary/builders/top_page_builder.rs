@@ -39,13 +39,13 @@ impl<'a> DiaryBuilder<'a> for TopPageBuilder<'a> {
                 false,
                 html! {
                     div.row {
-                        @for daily in diaries.as_slice()[start..end].iter() {
-                            @let link = daily.day.format("/%Y/%m/%d").to_string() + ".html";
+                        @for diary in diaries.as_slice()[start..end].iter() {
+                            @let link = diary.day.format("/%Y/%m/%d").to_string() + ".html";
                             div class=("col-xs-12 col-md-4") {
                                 div.day_colum {
-                                    time class=("diary") {(daily.day.format("%Y/%m/%d"))};
+                                    time class=("diary") {(diary.day.format("%Y/%m/%d"))};
                                     a href=(link) {
-                                        p.diary_title {(daily.title)}
+                                        p.diary_title {(diary.title)}
                                     }
                                 }
                             }

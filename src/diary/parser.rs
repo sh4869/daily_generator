@@ -20,11 +20,11 @@ fn get_title(md: &String) -> io::Result<String> {
 }
 
 fn get_date(filepath: &String) -> io::Result<Date<Local>> {
-    let dailystr = filepath.clone().replace(".md", "");
-    let dailyv: Vec<&str> = dailystr.split(MAIN_SEPARATOR).collect();
-    let y = (dailyv[1].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
-    let m = (dailyv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
-    let d = (dailyv[3].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
+    let diarystr = filepath.clone().replace(".md", "");
+    let diaryv: Vec<&str> = diarystr.split(MAIN_SEPARATOR).collect();
+    let y = (diaryv[1].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
+    let m = (diaryv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
+    let d = (diaryv[3].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
     let date = Local.ymd(y, m, d);
     Ok(date)
 }
@@ -36,7 +36,7 @@ fn convert_markdown(md: &str) -> io::Result<String> {
     Ok(html_buf)
 }
 
-pub fn parse_daily(path: &Path) -> io::Result<DiaryPage> {
+pub fn parse_diary(path: &Path) -> io::Result<DiaryPage> {
     let mut file = File::open(path)?;
     let date;
     match get_date(&path.to_str().unwrap().into()) {
@@ -66,7 +66,7 @@ pub fn parse_daily(path: &Path) -> io::Result<DiaryPage> {
             return Err(Error::new(ErrorKind::InvalidData, e.to_string()));
         }
     };
-    let daily = DiaryPage {
+    let diary = DiaryPage {
         content: if content.find("class=\"embedly-card\"").is_some() {
             String::from(EMBEDLY_TAG) + &content
         } else {
@@ -75,5 +75,5 @@ pub fn parse_daily(path: &Path) -> io::Result<DiaryPage> {
         title: title,
         day: date,
     };
-    Ok(daily)
+    Ok(diary)
 }
