@@ -1,6 +1,6 @@
 use maud::{html, Markup, PreEscaped, DOCTYPE};
 
-const HEADER_WORD: &str = "You will understand if you come here, You'll overlook your sleepiness";
+const HEADER_WORD: &str = "It is only a paper moon";
 
 const CSSLIST: [&str; 2] = ["https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css", "/css/index.css"];
 
@@ -31,7 +31,7 @@ fn footer() -> Markup {
         div.row {
             div#footer class=("col-xs-12") {
                 footer {
-                    p {a href="https://github.com/sh4869/diary" target="_blank" rel="noopener noreferrer" {"GitHub"}}
+                    p { "Generate By " {a href="https://github.com/sh4869/diary" target="_blank" rel="noopener noreferrer" {"dgen"}} }
                 }
             }
         }
@@ -45,7 +45,7 @@ pub fn page(title: &str, is_diary_page: bool, page: Markup) -> Markup {
             head {
                 meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
-                meta name="description" content="diary of @sh4869";
+                meta name="description" content="diary of sh4869";
                 @for url in &CSSLIST {
                     link rel="stylesheet" href=(url);
                 }
