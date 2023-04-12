@@ -1,9 +1,12 @@
 use crate::diary::diary_page::DiaryPage;
+use chrono::Datelike;
 use diary::builder::{BuildOption, DiaryBuilder, DiaryBuilderGen};
 use serde::Serialize;
-use std::fs::File;
+use std::collections::HashMap;
+use std::fs::{self, File};
 use std::io;
 use std::io::prelude::*;
+use std::path::Path;
 
 #[derive(Serialize)]
 struct IndexContent {
@@ -27,17 +30,29 @@ impl<'a> DiaryBuilder<'a> for IndexBuilder<'a> {
         "index builder"
     }
     fn build(&self, diaries: &mut Vec<DiaryPage>) -> io::Result<()> {
-        let index_contents = diaries
-            .into_iter()
-            .map(|d| IndexContent {
-                title: String::from(d.clone().title),
-                body: String::from(d.clone().content),
-                url: String::from(self.option.url.to_string() + &d.clone().get_path()),
-            })
-            .collect::<Vec<_>>();
-        let j = serde_json::to_string(&index_contents)?;
-        let mut file = File::create(self.option.dest.to_string() + "/index.json")?;
-        file.write_all(j.as_bytes())?;
+        let path = self.option.dest.to_string() + &String::from("/indexes");
+        if !Path::new(&path).exists() {
+            fs::create_dir(&path)?;
+        }
+        let index_contents = diaries.into_iter().fold(
+            HashMap::new(),
+            |mut m: HashMap<u32, HashMap<String, IndexContent>>, d| {
+                let c = IndexContent {
+                    title: String::from(d.clone().title),
+                    body: String::from(d.clone().content),
+                    url: String::from(self.option.url.to_string() + &d.clone().get_path()),
+                };
+                m.entry(d.day.year_ce().1)
+                    .or_insert_with(std::collections::HashMap::new)
+                    .insert(d.day.format("%Y/%m/%d").to_string(), c);
+                m
+            },
+        );
+        for (key,value) in &index_contents {
+            let j = serde_json::to_string(&value)?;
+            let mut file = File::create(self.option.dest.to_string() + "/indexes/" + &key.to_string() + ".json")?;
+            file.write_all(j.as_bytes())?;
+        }
         Ok(())
     }
 }

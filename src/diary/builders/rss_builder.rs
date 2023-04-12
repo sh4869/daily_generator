@@ -17,14 +17,13 @@ impl<'a> DiaryBuilderGen<'a> for RssBuilder<'a> {
 }
 
 impl<'a> DiaryBuilder<'a> for RssBuilder<'a> {
-
     fn builder_name(&self) -> &'static str {
         "rss builder"
     }
 
     fn build(&self, diaries: &mut Vec<DiaryPage>) -> io::Result<()> {
         diaries.sort_by(|a, b| b.day.cmp(&a.day));
-        let items = diaries[0..100]
+        let items = diaries[0..(if diaries.len() > 100 { 100 } else { diaries.len() })]
             .into_iter()
             .map(|v| {
                 ItemBuilder::default()
