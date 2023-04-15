@@ -13,7 +13,7 @@ pub mod diary;
 
 use crate::diary::builders::*;
 use crate::diary::{builder::BuildOption, builder::DiaryBuilder, builder::DiaryBuilderGen, parser::parse_diary};
-use chrono::{Date, Local};
+use chrono::{NaiveDate};
 use std::fs::{self, File};
 use std::io;
 use std::io::prelude::*;
@@ -74,7 +74,8 @@ fn template() -> io::Result<String> {
     }
 }
 
-pub fn create_diary_template(date: Date<Local>) -> io::Result<bool> {
+pub fn create_diary_template(o: Option<NaiveDate>) -> io::Result<bool> {
+    let date = o.map_or(io::Result::Err(Error::new(ErrorKind::InvalidInput, "error date")), |r| Ok(r))?;
     let path = "diary/".to_string() + &date.format("%Y/%m/%d").to_string() + &".md";
     let template = template()?;
     if !Path::new(&path).exists() {

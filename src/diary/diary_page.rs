@@ -1,8 +1,8 @@
-use chrono::{Date, Local};
+use chrono::NaiveDate;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct DiaryPage {
-    pub day: Date<Local>,
+    pub day: NaiveDate,
     pub title: String,
     pub content: String,
 }
