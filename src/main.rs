@@ -2,7 +2,7 @@ extern crate chrono;
 extern crate clap;
 extern crate dgen;
 
-use chrono::Local;
+use chrono::{Datelike, Local, NaiveDate};
 use clap::{App, Arg, SubCommand};
 
 use dgen::{build, create_diary_template};
@@ -16,17 +16,19 @@ fn main() {
         .subcommand(SubCommand::with_name("today").about("generate diary template file of yesterday"))
         .arg(Arg::with_name("dest").short("d").long("dest").help("dest directory of generated dailies file").takes_value(true))
         .get_matches();
-
+    let now = Local::now();
+    let today = NaiveDate::from_ymd_opt(now.year(), now.month(), now.day());
     if matches.subcommand_matches("ytd").is_some() {
-        match create_diary_template(Local::today().pred()) {
-            Ok(true) => println!("Create diary/{}.md", Local::today().pred().format("%Y/%m/%d")),
-            Ok(false) => println!("Error: diary/{}.md already exists.", Local::today().pred().format("%Y/%m/%d")),
+        let ytd = today.map_or(None, |r| r.pred_opt());
+        match create_diary_template(ytd) {
+            Ok(true) => println!("Create diary/{}.md", ytd.map_or("".to_string(), |r| r.format("%Y/%m/%d").to_string())),
+            Ok(false) => println!("Error: diary/{}.md already exists.",ytd.map_or("".to_string(), |r| r.format("%Y/%m/%d").to_string())),
             Err(e) => println!("Error: {}", e.to_string()),
         }
     } else if matches.subcommand_matches("today").is_some() {
-        match create_diary_template(Local::today()) {
-            Ok(true) => println!("Create diary/{}.md", Local::today().format("%Y/%m/%d")),
-            Ok(false) => println!("Error: diary/{}.md already exists.", Local::today().format("%Y/%m/%d")),
+        match create_diary_template(today) {
+            Ok(true) => println!("Create diary/{}.md", today.map_or("".to_string(), |r| r.format("%Y/%m/%d").to_string())),
+            Ok(false) => println!("Error: diary/{}.md already exists.", today.map_or("".to_string(), |r| r.format("%Y/%m/%d").to_string())),
             Err(e) => println!("Error: {}", e.to_string()),
         }
     } else {

@@ -1,4 +1,4 @@
-use chrono::{Date, Local, TimeZone};
+use chrono::{NaiveDate};
 use diary::diary_page::DiaryPage;
 use pulldown_cmark::{html, Options, Parser};
 use std::fs::File;
@@ -19,13 +19,13 @@ fn get_title(md: &String) -> io::Result<String> {
     Ok((v[1].split("title:").collect::<Vec<&str>>())[1].trim().into())
 }
 
-fn get_date(filepath: &String) -> io::Result<Date<Local>> {
+fn get_date(filepath: &String) -> io::Result<NaiveDate> {
     let diarystr = filepath.clone().replace(".md", "");
     let diaryv: Vec<&str> = diarystr.split(MAIN_SEPARATOR).collect();
     let y = (diaryv[1].parse::<i32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
     let m = (diaryv[2].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
     let d = (diaryv[3].parse::<u32>().map_err(|err| Error::new(ErrorKind::InvalidData, err)))?;
-    let date = Local.ymd(y, m, d);
+    let date = NaiveDate::from_ymd_opt(y, m, d).ok_or(Error::new(ErrorKind::InvalidData, "error on invalid date"))?;
     Ok(date)
 }
 
