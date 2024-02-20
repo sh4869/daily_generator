@@ -35,8 +35,7 @@ impl<'a> DiaryBuilder<'a> for RssBuilder<'a> {
                         v.clone()
                             .day
                             .and_hms_opt(23, 0, 0)
-                            .map(|r| DateTime::<Utc>::from_utc(r, Utc).to_rfc2822())
-                            .unwrap_or("default".to_string()),
+                            .map(|r| DateTime::<Utc>::from_naive_utc_and_offset(r, Utc).to_rfc2822())
                     )
                     .description(strip_tags(&v.clone().content))
                     .build()
