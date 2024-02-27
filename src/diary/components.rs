@@ -20,7 +20,7 @@ fn header() -> Markup {
                 p {(HEADER_WORD)}
                 div.link {
                     p {a href="/rss.xml" target="_blank" rel="noopener noreferrer" {"rss"}}
-                    p {a href="/calendar/" target="_blank" rel="noopener noreferrer" {"calendar"}}
+                    p {a href="/calendar/" rel="noopener noreferrer" {"calendar"}}
                 }
             }
         }
