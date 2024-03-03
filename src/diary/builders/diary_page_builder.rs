@@ -57,22 +57,22 @@ fn generate_html(target: &DiaryPage, before: Option<&DiaryPage>, after: Option<&
         true,
         html! {
             div.row.navigation {
-                div class=("col-xs-6")  {
-                    @if after.is_some() {
-                        time.small.diary {(after.unwrap().day.format("%Y/%m/%d"))}
-                        div.day {
-                            a href=(after.unwrap().get_path()) {
-                                p {(&after.unwrap().title)}
-                            }
-                        }
-                    }
-                }
                 div class=("col-xs-6") {
                     @if before.is_some() {
                         time.small.diary {(before.unwrap().day.format("%Y/%m/%d"))}
                         div.day {
                             a href=(before.unwrap().get_path()) {
                                 p {(&before.unwrap().title)}
+                            }
+                        }
+                    }
+                }
+                div class=("col-xs-6")  {
+                    @if after.is_some() {
+                        time.small.diary {(after.unwrap().day.format("%Y/%m/%d"))}
+                        div.day {
+                            a href=(after.unwrap().get_path()) {
+                                p {(&after.unwrap().title)}
                             }
                         }
                     }
